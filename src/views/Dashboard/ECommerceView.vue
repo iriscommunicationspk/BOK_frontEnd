@@ -81,7 +81,7 @@ function filterRemoved() {
       <div>
         <label
           for="city-filter"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white ml-2"
+          class="block mb-4 text-sm font-medium text-gray-900 dark:text-white ml-2"
         >
           Filter by City
         </label>
