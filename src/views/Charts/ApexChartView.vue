@@ -15,6 +15,7 @@ import ImagePieChart from '@/components/Charts/ApexCharts/ImagePieChart.vue'
 import BarChart from '@/components/Charts/ApexCharts/BarChart.vue'
 import AreaChart from '@/components/Charts/ApexCharts/AreaChart.vue'
 import TimelineChart from '@/components/Charts/ApexCharts/TimelineChart.vue'
+import GaugeChart from '@/components/Charts/ECharts/Guage.vue'
 
 import { ref } from 'vue'
 
@@ -27,7 +28,11 @@ const pageTitle = ref('Apex Chart')
     <BreadcrumbDefault :pageTitle="pageTitle" />
     <!-- Breadcrumb End -->
 
+    <!-- Gauge Chart -->
+    <GaugeChart />
+    <!-- end -->      
     <div class="grid grid-cols-12 gap-4 md:gap-6 2xl:gap-7.5">
+
       <!-- tree map 1-->
       <TreeMap />
       <!-- end -->

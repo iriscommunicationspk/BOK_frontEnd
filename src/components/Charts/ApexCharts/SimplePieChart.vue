@@ -10,7 +10,13 @@ const data = {
   chartOptions: {
     chart: {
       width: 380,
-      type: 'pie'
+      type: 'pie',
+      toolbar: {
+      show: true, // Enable the toolbar
+      tools: {
+        download: true // Allow downloading the chart
+      }
+    }
     },
     labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
     responsive: [

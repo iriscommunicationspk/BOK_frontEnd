@@ -17,14 +17,14 @@ onClickOutside(target, () => {
       to="#"
       @click.prevent="dropdownOpen = !dropdownOpen"
     >
-      <span class="hidden text-right lg:block">
+      <span class="hidden text-right lg:block mr-7">
         <span class="block text-sm font-medium text-black dark:text-white">Wasif Zia</span>
         <span class="block text-xs font-medium">IT Manager</span>
       </span>
 
-      <span class="h-12 w-12 rounded-full">
+      <!-- <span class="h-12 w-12 rounded-full">
         <img src="@/assets/images/user/user-01.png" alt="User" />
-      </span>
+      </span> -->
 
       <!-- <svg
         :class="dropdownOpen && 'rotate-180'"

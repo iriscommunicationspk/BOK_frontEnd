@@ -60,7 +60,7 @@ const sidebarStore = useSidebarStore()
       <div class="hidden sm:block">
         <form action="https://formbold.com/s/unique_form_id" method="POST">
           <div class="relative">
-            <button class="absolute top-1/2 left-0 -translate-y-1/2">
+            <!-- <button class="absolute top-1/2 left-0 -translate-y-1/2">
               <svg
                 class="fill-body hover:fill-primary dark:fill-bodydark dark:hover:fill-primary"
                 width="20"
@@ -82,13 +82,13 @@ const sidebarStore = useSidebarStore()
                   fill=""
                 />
               </svg>
-            </button>
+            </button> -->
 
-            <input
+            <!-- <input
               type="text"
               placeholder="Type to search..."
               class="w-full xl:w-125 bg-transparent pr-4 pl-9 focus:outline-none"
-            />
+            /> -->
           </div>
         </form>
       </div>
@@ -102,11 +102,11 @@ const sidebarStore = useSidebarStore()
           </li>
 
           <!-- Notification Menu Area -->
-          <DropdownNotification />
+          <!-- <DropdownNotification /> -->
           <!-- Notification Menu Area -->
 
           <!-- Chat Notification Area -->
-          <DropdownMessage />
+          <!-- <DropdownMessage /> -->
           <!-- Chat Notification Area -->
         </ul>
 

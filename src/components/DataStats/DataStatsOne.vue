@@ -12,7 +12,12 @@ const series = ref([useDataStore().account_holder, useDataStore().none_account_h
 const chartOptions = ref({
   chart: {
     width: 200,
-    type: 'pie'
+    type: 'pie',
+    toolbar: {
+      show: true, // Enable the toolbar
+      tools: {
+        download: true // Allow downloading the chart
+      }}
   },
   labels: ['Account Holders', 'None account Holders'], // Remove labels by setting this to an empty array
   plotOptions: {
@@ -71,7 +76,7 @@ watch(
 <template>
   <!-- Card Item Start 1st  -->
   <div
-    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-stroke bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark"
+    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-stroke bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-2"
   >
     <!-- <div
       class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4"
@@ -121,7 +126,7 @@ watch(
   <!-- Achived sample size -- 2 -->
   <!-- Card Item Start -->
   <div
-    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-stroke bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark"
+    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-stroke bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-3"
   >
     <!-- <div
       class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4"
@@ -154,7 +159,7 @@ watch(
   <!-- gender -- 2 -->
   <!-- Card Item Start -->
   <div
-    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-stroke bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark"
+    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-stroke bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-3"
   >
     <!-- <div
       class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4"
@@ -184,10 +189,10 @@ watch(
   </div>
   <!-- Card Item End -->
 
-  <!-- gender -->
+  <!-- Customer Type -->
   <!-- Card Item Start -->
   <div
-    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-stroke bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark"
+    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-stroke bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-4"
   >
     <!-- <div
       class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4"
