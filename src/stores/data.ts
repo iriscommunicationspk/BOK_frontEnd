@@ -17,7 +17,8 @@ interface DataItem {
   staff_interaction: string
   purpose_of_visit: string
   turn_around_time: string
-
+  over_all_satisfactory: string
+  // widrawing_money: string
 }
 
 export const useDataStore = defineStore({
@@ -28,7 +29,8 @@ export const useDataStore = defineStore({
     filteredData: [] as DataItem[], // To store the data after applying filters
     malePercentage: 0,
     femalePercentage: 0,
-    total_sample: 0,
+    total_sample: 90,
+    achieved: 0,
     account_holder: 0,
     none_account_holder: 0,
     old_customer: 0,
@@ -36,7 +38,7 @@ export const useDataStore = defineStore({
     branch: 0,
     withdrawal: 0,
     deposit: 0,
-    staff_int_top2:0,
+    staff_int_top2: 0,
     closing_acc: 0,
     transferring_fund: 0,
     loan_service: 0,
@@ -44,13 +46,16 @@ export const useDataStore = defineStore({
     filter_applied: false,
     city: 0,
     staff_interaction_highly: 0,
-    staff_interaction_high:0,
+    staff_interaction_high: 0,
     purpose_of_visit_high: 0,
     purpose_of_visit_highly: 0,
     purpose_of_visit_top2: 0,
     turn_around_time_high: 0,
     turn_around_time_highly: 0,
     turn_around_time_top2: 0,
+    overAll_high: 0,
+    overAll_highly: 0,
+    overAll_top2: 0,
     filters: {
       gender: '',
       customerType: '',
@@ -59,7 +64,8 @@ export const useDataStore = defineStore({
       closing_acc: '',
       transferring_fund: '',
       loan_service: '',
-      branch: ''
+      branch: '',
+      withdrawal: ''
     },
     loader: false
   }),
@@ -112,6 +118,10 @@ export const useDataStore = defineStore({
         filtered = filtered.filter((item) => item.loan_service === this.filters.loan_service)
       }
 
+      if (this.filters.withdrawal) {
+        filtered = filtered.filter((item) => item.widrawing_money === this.filters.withdrawal)
+      }
+
       if (this.filters.branch) {
         console.log('Filtering by branch:', this.filters.branch)
         filtered = filtered.filter((item) => item.branch === this.filters.branch)
@@ -123,11 +133,11 @@ export const useDataStore = defineStore({
       this.updateStatistics()
     },
     updateStatistics() {
-      console.log('Updating statistics...');
-      
+      console.log('Updating statistics...')
+
       const total = this.filteredData.length
 
-      this.total_sample = total
+      this.achieved = total
 
       // Calculate percentages based on filtered data
       const maleCount = this.filteredData.filter((item) => item.gender === 'Male').length
@@ -171,27 +181,28 @@ export const useDataStore = defineStore({
         (item) => item.staff_interaction == 'Highly satisfied'
       ).length
 
-      console.log("Count = ",staff_interaction_highly);
+      console.log('Count = ', staff_interaction_highly)
       this.staff_interaction_highly = total
         ? Math.floor((staff_interaction_highly / total) * 100)
         : 0
 
-      console.log("Percentage = ",this.staff_interaction_highly,"%");
+      console.log('Percentage = ', this.staff_interaction_highly, '%')
 
       const staff_interaction_high = this.filteredData.filter(
         (item) => item.staff_interaction == 'Somewhat Satisfied'
       ).length
 
-      console.log("Count = ",staff_interaction_high);
-      this.staff_interaction_high = total
-        ? Math.floor((staff_interaction_high / total) * 100)
-        : 0
+      console.log('Count = ', staff_interaction_high)
+      this.staff_interaction_high = total ? Math.floor((staff_interaction_high / total) * 100) : 0
 
-      console.log("Percentage = ",this.staff_interaction_high,"%");
-        
-      console.log("Top 2 Boxes = ",this.staff_interaction_high + this.staff_interaction_highly,"%");
+      console.log('Percentage = ', this.staff_interaction_high, '%')
+
+      console.log(
+        'Top 2 Boxes = ',
+        this.staff_interaction_high + this.staff_interaction_highly,
+        '%'
+      )
       this.staff_int_top2 = this.staff_interaction_high + this.staff_interaction_highly
-
 
       // purpose_of_visit - Top 2 boxes
 
@@ -199,26 +210,21 @@ export const useDataStore = defineStore({
         (item) => item.purpose_of_visit == 'Highly satisfied'
       ).length
 
-      console.log("purpose_of_visit_high Count = ",purpose_of_visit_high);
-      this.purpose_of_visit_high = total
-        ? Math.floor((purpose_of_visit_high / total) * 100)
-        : 0
+      console.log('purpose_of_visit_high Count = ', purpose_of_visit_high)
+      this.purpose_of_visit_high = total ? Math.floor((purpose_of_visit_high / total) * 100) : 0
 
-      console.log("purpose_of_visit_high Percentage = ",this.purpose_of_visit_high,"%");
+      console.log('purpose_of_visit_high Percentage = ', this.purpose_of_visit_high, '%')
 
       const purpose_of_visit_highly = this.filteredData.filter(
         (item) => item.purpose_of_visit == 'Somewhat Satisfied'
       ).length
 
-      console.log("purpose_of_visit_highly Count = ",purpose_of_visit_highly);
-      this.purpose_of_visit_highly = total
-        ? Math.floor((purpose_of_visit_highly / total) * 100)
-        : 0
+      console.log('purpose_of_visit_highly Count = ', purpose_of_visit_highly)
+      this.purpose_of_visit_highly = total ? Math.floor((purpose_of_visit_highly / total) * 100) : 0
 
-      console.log("purpose_of_visit_highly Percentage = ",this.purpose_of_visit_highly,"%");
+      console.log('purpose_of_visit_highly Percentage = ', this.purpose_of_visit_highly, '%')
 
       this.purpose_of_visit_top2 = this.purpose_of_visit_high + this.purpose_of_visit_highly
-
 
       // turn_around_time - Top 2 boxes
 
@@ -226,28 +232,47 @@ export const useDataStore = defineStore({
         (item) => item.turn_around_time == 'Highly satisfied'
       ).length
 
-      console.log("Turn around time Count high = ",turn_around_time_high);
-      this.turn_around_time_high = total
-        ? Math.floor((turn_around_time_high / total) * 100)
-        : 0
+      console.log('Turn around time Count high = ', turn_around_time_high)
+      this.turn_around_time_high = total ? Math.floor((turn_around_time_high / total) * 100) : 0
 
-      console.log("Turn around time Percentage high = ",this.turn_around_time_high,"%");
+      console.log('Turn around time Percentage high = ', this.turn_around_time_high, '%')
 
       const turn_around_time_highly = this.filteredData.filter(
         (item) => item.turn_around_time == 'Somewhat Satisfied'
       ).length
 
-      console.log("Turn around time Count highly = ",turn_around_time_highly);
-      this.turn_around_time_highly = total
-        ? Math.floor((turn_around_time_highly / total) * 100)
-        : 0
+      console.log('Turn around time Count highly = ', turn_around_time_highly)
+      this.turn_around_time_highly = total ? Math.floor((turn_around_time_highly / total) * 100) : 0
 
-      console.log("Turn around time Percentage highly = ",this.turn_around_time_highly,"%");
+      console.log('Turn around time Percentage highly = ', this.turn_around_time_highly, '%')
 
       this.turn_around_time_top2 = this.turn_around_time_high + this.turn_around_time_highly
 
+      console.log('Top 2 Boxes = ', this.turn_around_time_top2, '%')
 
-        
+      // over_all_satisfactory - Top 2 boxes
+
+      const over_all_high = this.filteredData.filter(
+        (item) => item.over_all_satisfactory == 'Highly satisfied'
+      ).length
+
+      console.log('Overall high Count= ', over_all_high)
+      this.overAll_high = total ? Math.floor((over_all_high / total) * 100) : 0
+
+      console.log('Overall high Percentage= ', this.overAll_high, '%')
+
+      const over_all_highly = this.filteredData.filter(
+        (item) => item.over_all_satisfactory == 'Somewhat Satisfied'
+      ).length
+
+      console.log('Overall highly Count= ', over_all_highly)
+      this.overAll_highly = total ? Math.floor((over_all_highly / total) * 100) : 0
+
+      console.log('Overall highly Percentage = ', this.overAll_highly, '%')
+
+      this.overAll_top2 = this.overAll_high + this.overAll_highly
+
+      console.log('Top 2 Boxes = ', this.overAll_top2, '%')
     },
     setGender(gender: string) {
       this.filters.gender = gender
@@ -275,6 +300,10 @@ export const useDataStore = defineStore({
     },
     setLoanService(loanService: string) {
       this.filters.loan_service = loanService
+      this.applyFilters()
+    },
+    setWithdrawal(withdrawal: string) {
+      this.filters.withdrawal = withdrawal
       this.applyFilters()
     },
     setBranch(branch: string) {

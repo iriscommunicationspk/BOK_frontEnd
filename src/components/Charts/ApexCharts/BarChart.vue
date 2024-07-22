@@ -53,8 +53,8 @@ const data = ref({
     colors: ['#1584e7'],
     dataLabels: {
       enabled: true,
-      formatter: function (val) {
-        return val + '%'; // Add percentage sign to the value
+      formatter: function (val: any) {
+        return val + '%' // Add percentage sign to the value
       },
       style: {
         colors: ['#FFFFFF'] // Change text color if needed
@@ -73,9 +73,7 @@ const data = ref({
       }
     }
   }
-});
-
-
+})
 
 watch(
   () => [
@@ -97,11 +95,13 @@ watch(
 
 <template>
   <div
-    class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-[1px_2px_55px_-18px_#00008070] dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8"
+    class="col-span-12 rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-[1px_2px_55px_-18px_#00008070] dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8"
   >
-    <div class="mb-3 justify-between gap-4 sm:flex">
+    <div class="mb-3 justify-center gap-4 sm:flex">
       <div>
-        <h4 class="text-xl font-bold text-black dark:text-white">Purpose of Visiting Branch - Top 5</h4>
+        <h4 class="text-[22px] text-center font-bold text-black dark:text-white mt-4">
+          Purpose of Visiting Branch - Top 5
+        </h4>
       </div>
     </div>
     <div class="mb-2">
@@ -115,6 +115,7 @@ watch(
           ref="chart"
         />
       </div>
+      <span class="ml-4 font-bold text-base float-right"> n={{ useDataStore().achieved }} </span>
     </div>
   </div>
 </template>

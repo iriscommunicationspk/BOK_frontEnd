@@ -4,6 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+*{
+    font-family: "Public Sans", sans-serif;
+  }
+  .apexcharts-legend.apexcharts-align-center.apx-legend-position-right {
+    justify-content: center;
+    height: 60%;
+}
 @layer base {
     body {
         @apply relative z-1 bg-whiten font-satoshi text-base font-normal text-body dark:text-bodydark dark:bg-boxdark-2;

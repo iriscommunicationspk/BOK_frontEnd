@@ -1,20 +1,20 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
-import * as echarts from 'echarts/core';
-import { GaugeChart } from 'echarts/charts';
-import { CanvasRenderer } from 'echarts/renderers';
-import { useDataStore } from "@/stores/data";
+import { onMounted, ref, watch } from 'vue'
+import * as echarts from 'echarts/core'
+import { GaugeChart } from 'echarts/charts'
+import { CanvasRenderer } from 'echarts/renderers'
+import { useDataStore } from '@/stores/data'
 
-echarts.use([GaugeChart, CanvasRenderer]);
+echarts.use([GaugeChart, CanvasRenderer])
 
-const dataStore = useDataStore();
-const data = ref(dataStore.staff_int_top2 / 100);
-const chartInstance = ref(null);
+const dataStore = useDataStore()
+const data = ref(dataStore.overAll_top2 / 100)
+const chartInstance = ref(null)
 
 const createChart = () => {
-  const chartDom = document.getElementById('chart');
-  chartInstance.value = echarts.init(chartDom);
-  
+  const chartDom = document.getElementById('chart')
+  chartInstance.value = echarts.init(chartDom)
+
   const option = {
     series: [
       {
@@ -67,75 +67,71 @@ const createChart = () => {
           rotate: 'tangential',
           formatter: function (value) {
             if (value === 0.875) {
-              return '';
+              return ''
             } else if (value === 0.625) {
-              return '';
+              return ''
             } else if (value === 0.375) {
-              return '';
+              return ''
             } else if (value === 0.125) {
-              return '';
+              return ''
             }
-            return '';
+            return ''
           }
         },
         title: {
           offsetCenter: [0, '-5%'],
-          fontSize: 18
+          fontSize: 50
         },
         detail: {
           fontSize: 30,
-          offsetCenter: [0, '-35%'],
+          offsetCenter: [0, '-10%'],
           valueAnimation: true,
           formatter: function (value) {
-            return Math.round(value * 100) + '';
+            return Math.round(value * 100) + '%'
           },
           color: 'inherit'
         },
         data: [
           {
-            value: data.value,
-            name: 'Grade Rating',
-            
+            value: data.value
+            // name: 'Grade Rating'
           }
         ]
       }
     ]
-  };
+  }
 
-  chartInstance.value.setOption(option);
-};
+  chartInstance.value.setOption(option)
+}
 
-onMounted(createChart);
+onMounted(createChart)
 
 watch(
-  () => dataStore.staff_int_top2,
+  () => dataStore.overAll_top2,
   (newValue) => {
-    data.value = newValue / 100;
+    data.value = newValue / 100
     chartInstance.value.setOption({
       series: [
         {
           data: [
             {
-              value: data.value,
-              name: 'Grade Rating'
+              value: data.value
+              // name: 'Grade Rating'
             }
           ]
         }
       ]
-    });
+    })
   }
-);
-
+)
 </script>
 
 <template>
- 
-    <div id="chart" class="  " style="width: 100%; height: 300px;"></div>
-  
+  <div id="chart" class="  " style="width: 100%; height: 400px"></div>
 </template>
 
-<style scoped>
+<!-- <style scoped>
 #chart {
   /* width: 50px; */
 }
-</style>
+</style> -->

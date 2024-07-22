@@ -17,7 +17,8 @@ const chartOptions = ref({
       show: true, // Enable the toolbar
       tools: {
         download: true // Allow downloading the chart
-      }}
+      }
+    }
   },
   labels: ['Account Holders', 'None account Holders'], // Remove labels by setting this to an empty array
   plotOptions: {
@@ -58,37 +59,45 @@ const chartOptions = ref({
   ]
 })
 
-
+const achieved_percentage = ref(0)
 
 // Watch for changes in the store data
 watch(
-  () => [useDataStore().account_holder, useDataStore().none_account_holder],
-  ([newAccountHolder, newNoneAccountHolder]) => {
+  () => [
+    useDataStore().account_holder,
+    useDataStore().none_account_holder,
+    useDataStore().achieved,
+    useDataStore().total_sample
+  ],
+  ([newAccountHolder, newNoneAccountHolder, achieved, total]) => {
+    achieved_percentage.value = Math.floor((achieved / total) * 100)
     series.value = [newAccountHolder, newNoneAccountHolder]
-    console.log(newAccountHolder, newNoneAccountHolder);
-    
+    console.log(newAccountHolder, newNoneAccountHolder)
   }
 )
-
-
 </script>
 
 <template>
   <!-- Card Item Start 1st  -->
   <div
-    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-stroke bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-2"
+    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-[#1c24344d] bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-2"
   >
     <!-- <div
       class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4"
     ></div> -->
 
-    <div class="mt-4 flex flex-col">
+    <div class="mt-4 h-full">
       <div>
-        <h4 class="text-title-md font-bold text-black dark:text-white">Total sample size</h4>
+        <h4 class="text-[22px] text-center font-bold text-black dark:text-white">
+          Total sample size
+        </h4>
         <!-- <span class="text-sm font-medium">item.title </span> -->
       </div>
 
-      <span v-if="useDataStore().loader" class="flex items-center gap-1 text-lg font-medium mt-5">
+      <span
+        v-if="useDataStore().loader"
+        class="flex items-center gap-1 text-[40px] font-[800] justify-center h-[65%]"
+      >
         {{ useDataStore().total_sample }}
         <!-- <svg
           class="fill-meta-3"
@@ -126,25 +135,31 @@ watch(
   <!-- Achived sample size -- 2 -->
   <!-- Card Item Start -->
   <div
-    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-stroke bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-3"
+    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-[#1c24344d] bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-3"
   >
     <!-- <div
       class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4"
     ></div> -->
 
-    <div class="mt-4 flex flex-col">
+    <div class="mt-4 h-full">
       <div>
-        <h4 class="text-title-md font-bold text-black dark:text-white">Achieved Sample Size</h4>
+        <h4 class="text-[22px] text-center font-bold text-black dark:text-white mb-5">
+          Achieved Sample Size
+        </h4>
         <!-- <span class="text-sm font-medium">item.title </span> -->
       </div>
 
-      <div v-if="useDataStore().loader" class="flex justify-start gap-10">
-        <span class="flex items-center gap-1 text-lg font-medium mt-5">
-          total = {{ useDataStore().total_sample }}
-          <!-- <img src="@/assets/images/male.svg" alt="" class="h-7" /> -->
+      <div v-if="useDataStore().loader" class="flex flex-col justify-center gap-[10px] h-[60%]">
+        <span class="flex items-center justify-center gap-3 text-lg mb-3 font-medium">
+          <p class="text-[20px] font-[600]">Total =</p>
+          <span class="text-[40px] font-[800]"> {{ useDataStore().achieved }}</span>
         </span>
-        <span v-if="useDataStore().loader" class="flex items-center gap-1 text-lg font-medium mt-5">
-          achived = 100%
+        <span
+          v-if="useDataStore().loader"
+          class="flex items-center justify-center gap-3 text-lg font-medium"
+        >
+          <p class="text-[20px] font-[600]">Achieved =</p>
+          <span class="text-[40px] font-[800]"> {{ achieved_percentage }}%</span>
           <!-- <img src="@/assets/images/female.svg" alt="" class="h-10" /> -->
         </span>
       </div>
@@ -159,26 +174,34 @@ watch(
   <!-- gender -- 2 -->
   <!-- Card Item Start -->
   <div
-    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-stroke bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-3"
+    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-[#1c24344d] bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-3"
   >
     <!-- <div
       class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4"
     ></div> -->
 
-    <div class="mt-4 flex flex-col">
+    <div class="mt-4 h-full">
       <div>
-        <h4 class="text-title-md font-bold text-black dark:text-white">Gender Proportion</h4>
+        <h4 class="text-[22px] text-center font-bold text-black dark:text-white mb-5">
+          Gender Proportion
+        </h4>
         <!-- <span class="text-sm font-medium">item.title </span> -->
       </div>
 
-      <div v-if="useDataStore().loader" class="flex justify-start gap-15">
-        <span class="flex items-center gap-1 text-lg font-medium mt-5">
-          {{ useDataStore().malePercentage }}%
-          <img src="@/assets/images/male.png" alt="" class="h-15" />
+      <div v-if="useDataStore().loader" class="flex flex-col gap-1 justify-center">
+        <span class="flex items-center justify-center gap-[30px] text-lg font-medium">
+          <img src="@/assets/images/male.png" alt="" class="h-[60px]" />
+          <span class="text-[30px] font-[800]"> {{ useDataStore().malePercentage }}% </span>
         </span>
-        <span v-if="useDataStore().loader" class="flex items-center gap-1 text-lg font-medium mt-5">
-          {{ useDataStore().femalePercentage }}%
-          <img src="@/assets/images/female.png" alt="" class="h-15" />
+
+        <div class="h-[1px] bg-[#e5e5e5] w-[55%] mx-auto"></div>
+
+        <span
+          v-if="useDataStore().loader"
+          class="flex items-center justify-center gap-[30px] text-lg font-medium"
+        >
+          <img src="@/assets/images/female.png" alt="" class="h-[60px]" />
+          <span class="text-[30px] font-[800]"> {{ useDataStore().femalePercentage }}% </span>
         </span>
       </div>
       <div v-else class="flex justify-start gap-15">
@@ -192,19 +215,19 @@ watch(
   <!-- Customer Type -->
   <!-- Card Item Start -->
   <div
-    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-stroke bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-4"
+    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-[#1c24344d] bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-4"
   >
     <!-- <div
       class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4"
     ></div> -->
 
-    <div class="flex flex-col gap-4 justify-center items-center">
+    <div class="flex flex-col gap-4 justify-center items-center mt-4">
       <div>
-        <h4 class="text-title-md font-bold text-black dark:text-white">Customer Type</h4>
+        <h4 class="text-[22px] text-center font-bold text-black dark:text-white">Customer Type</h4>
         <!-- <span class="text-sm font-medium">item.title </span> -->
       </div>
 
-      <div v-if="useDataStore().loader" class="flex flex-col">
+      <div v-if="useDataStore().loader" class="flex flex-col justify-center">
         <div>
           <div id="TreeMap" class="mx-auto flex justify-center">
             <VueApexCharts
@@ -217,7 +240,7 @@ watch(
           </div>
         </div>
       </div>
-      <div v-else class="flex justify-start gap-15">
+      <div v-else class="flex justify-center gap-15">
         <span class="mt-6 w-18 h-8 rounded-lg animate-pulse bg-slate-500"> </span>
         <span class="mt-6 w-18 h-8 rounded-lg animate-pulse bg-slate-500"> </span>
       </div>

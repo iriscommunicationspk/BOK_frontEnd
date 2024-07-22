@@ -5,7 +5,7 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import { useDataStore } from '@/stores/data'
 import RadialChart from '@/components/Charts/ApexCharts/RadialChart.vue'
 import BarChart from '@/components/Charts/ApexCharts/BarChart.vue'
-import GaugeChart from '@/components/Charts/ECharts/Guage.vue'
+import Gauge from '@/components/Charts/ECharts/Guage.vue'
 import RadialChart1 from '@/components/Charts/ApexCharts/RadialChart1.vue'
 import RadialChart2 from '@/components/Charts/ApexCharts/RadialChart2.vue'
 import RadialChart3 from '@/components/Charts/ApexCharts/RadialChart3.vue'
@@ -36,22 +36,46 @@ function filterByCity(event: Event) {
 // Clear filters
 function filterRemoved() {
   dataStore.clearFilters()
-  const genderSelect = document.getElementById('gender-filter') as HTMLSelectElement
-  if (genderSelect) genderSelect.value = 'Choose a gender'
-  const customerSelect = document.getElementById('customer-filter') as HTMLSelectElement
-  if (customerSelect) customerSelect.value = 'Choose a customer type'
+  const selects = document.querySelectorAll('select')
+  selects.forEach((select) => {
+    select.value = 'Choose an option'
+  })
 }
 
 const setFilter = (filter: any, event: any) => {
   const value = event.target.value
-  if (filter === 'deposit') {
-    dataStore.setDeposit(value)
-  } else if (filter === 'closing_acc') {
-    dataStore.setClosingAcc(value)
-  } else if (filter === 'transferring_fund') {
-    dataStore.setTransferringFund(value)
-  } else if (filter === 'loan_service') {
-    dataStore.setLoanService(value)
+  console.log(value)
+
+  if (value === 'Deposit') {
+    dataStore.setClosingAcc('')
+    dataStore.setLoanService('')
+    dataStore.setTransferringFund('')
+    dataStore.setWithdrawal('')
+    dataStore.setDeposit('Yes')
+  } else if (value === 'Closing Account') {
+    dataStore.setDeposit('')
+    dataStore.setLoanService('')
+    dataStore.setTransferringFund('')
+    dataStore.setWithdrawal('')
+    dataStore.setClosingAcc('Yes')
+  } else if (value === 'Transferring Fund') {
+    dataStore.setDeposit('')
+    dataStore.setLoanService('')
+    dataStore.setClosingAcc('')
+    dataStore.setWithdrawal('')
+    dataStore.setTransferringFund('Yes')
+  } else if (value === 'Loan Service') {
+    dataStore.setDeposit('')
+    dataStore.setClosingAcc('')
+    dataStore.setTransferringFund('')
+    dataStore.setWithdrawal('')
+    dataStore.setLoanService('Yes')
+  } else if (value === 'Withdraw') {
+    dataStore.setDeposit('')
+    dataStore.setClosingAcc('')
+    dataStore.setTransferringFund('')
+    dataStore.setLoanService('')
+    dataStore.setWithdrawal('Yes')
   } else if (filter === 'branch') {
     dataStore.setBranch(value)
     console.log('in else')
@@ -65,9 +89,9 @@ const setFilter = (filter: any, event: any) => {
       <div class="w-min">
         <label
           for="gender-filter"
-          class="block text-sm font-medium text-gray-900 dark:text-white ml-2"
+          class="block text-base font-semibold text-gray-900 dark:text-white ml-2"
         >
-          Filter by Gender
+          Gender
         </label>
         <select
           id="gender-filter"
@@ -75,17 +99,17 @@ const setFilter = (filter: any, event: any) => {
           @change="filterByGender"
         >
           <option selected>Choose an option</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
+          <option class="text-black font-semibold p-5 text-base" value="Male">Male</option>
+          <option class="text-black font-semibold p-5 text-base" value="Female">Female</option>
         </select>
       </div>
 
       <div>
         <label
           for="customer-filter"
-          class="block text-sm font-medium text-gray-900 dark:text-white ml-2"
+          class="block text-base font-semibold text-gray-900 dark:text-white ml-2"
         >
-          Filter by Customer Type
+          Customer Type
         </label>
         <select
           id="customer-filter"
@@ -93,17 +117,19 @@ const setFilter = (filter: any, event: any) => {
           @change="filterByCustomerType"
         >
           <option selected>Choose an option</option>
-          <option value="Yes">Account Holder</option>
-          <option value="No">None Account Holder</option>
+          <option class="text-black font-semibold p-5 text-base" value="Yes">Account Holder</option>
+          <option class="text-black font-semibold p-5 text-base" value="No">
+            None Account Holder
+          </option>
         </select>
       </div>
 
       <div>
         <label
           for="city-filter"
-          class="block text-sm font-medium text-gray-900 dark:text-white ml-2"
+          class="block text-base font-semibold text-gray-900 dark:text-white ml-2"
         >
-          Filter by City
+          City
         </label>
         <select
           id="city-filter"
@@ -111,90 +137,49 @@ const setFilter = (filter: any, event: any) => {
           @change="filterByCity"
         >
           <option selected>Choose an option</option>
-          <option value="Lahore">Lahore</option>
-          <option value="Karachi">Karachi</option>
-          <option value="Islamabad">Islamabad</option>
+          <option class="text-black font-semibold p-5 text-base" value="Lahore">Lahore</option>
+          <option class="text-black font-semibold p-5 text-base" value="Karachi">Karachi</option>
+          <option class="text-black font-semibold p-5 text-base" value="Islamabad">
+            Islamabad
+          </option>
         </select>
       </div>
 
       <!-- purpose of visiting -->
+
       <div>
         <label
-          for="deposit-filter"
-          class="block text-sm font-medium text-gray-900 dark:text-white ml-2"
+          for="visiting-filter"
+          class="block text-base font-semibold text-gray-900 dark:text-white ml-2"
         >
-          Filter by Deposit
+          Purpose of visiting
         </label>
         <select
-          id="deposit-filter"
+          id="visiting-filter"
           class="block py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer mb-5 ml-2"
           @change="setFilter('deposit', $event)"
         >
           <option selected>Choose an option</option>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-        </select>
-      </div>
-
-      <div>
-        <label
-          for="closing-acc-filter"
-          class="blocktext-sm font-medium text-gray-900 dark:text-white ml-2"
-        >
-          Filter by Closing Account
-        </label>
-        <select
-          id="closing-acc-filter"
-          class="block py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer mb-5 ml-2"
-          @change="setFilter('closing_acc', $event)"
-        >
-          <option selected>Choose an option</option>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-        </select>
-      </div>
-
-      <div>
-        <label
-          for="transferring-fund-filter"
-          class="block text-sm font-medium text-gray-900 dark:text-white ml-2"
-        >
-          Filter by Transferring Fund
-        </label>
-        <select
-          id="transferring-fund-filter"
-          class="block py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer mb-5 ml-2"
-          @change="setFilter('transferring_fund', $event)"
-        >
-          <option selected>Choose an option</option>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
-        </select>
-      </div>
-      <div>
-        <label
-          for="loan-service-filter"
-          class="block text-sm font-medium text-gray-900 dark:text-white ml-2"
-        >
-          Filter by Loan Service
-        </label>
-        <select
-          id="loan-service-filter"
-          class="block py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer mb-5 ml-2"
-          @change="setFilter('loan_service', $event)"
-        >
-          <option selected>Choose an option</option>
-          <option value="Yes">Yes</option>
-          <option value="No">No</option>
+          <option value="Deposit" class="text-black font-semibold p-5 text-base">Deposit</option>
+          <option value="Closing Account" class="text-black font-semibold p-5 text-base">
+            Closing Account
+          </option>
+          <option value="Transferring Fund" class="text-black font-semibold p-5 text-base">
+            Transferring Fund
+          </option>
+          <option value="Loan Service" class="text-black font-semibold p-5 text-base">
+            Loan Service
+          </option>
+          <option value="Withdraw" class="text-black font-semibold p-5 text-base">Withdraw</option>
         </select>
       </div>
 
       <div>
         <label
           for="branch-filter"
-          class="block text-sm font-medium text-gray-900 dark:text-white ml-2"
+          class="block text-base font-semibold text-gray-900 dark:text-white ml-2"
         >
-          Filter by branch
+          Branch
         </label>
         <select
           id="branch-filter"
@@ -202,7 +187,7 @@ const setFilter = (filter: any, event: any) => {
           @change="setFilter('branch', $event)"
         >
           <option selected>Choose an option</option>
-          <option value="ABCC">ABC</option>
+          <option class="text-black font-semibold p-5 text-base" value="ABCC">ABC</option>
         </select>
       </div>
     </div>
@@ -216,13 +201,14 @@ const setFilter = (filter: any, event: any) => {
         dataStore.filters.closing_acc ||
         dataStore.filters.transferring_fund ||
         dataStore.filters.loan_service ||
-        dataStore.filters.city
+        dataStore.filters.city ||
+        dataStore.filters.withdrawal
       "
       @click="filterRemoved"
       class="flex justify-end mb-7 transition-all duration-300"
     >
       <button
-        class="dark:bg-red text-red dark:text-white p-2 rounded block transition-all duration-300 hover:bg-red dark:hover:bg-white dark:hover:text-red hover:text-white shadow-[0px_0px_6px_1px_red] dark:shadow-[0px_0px_6px_1px]"
+        class="dark:bg-[#008ffb] text-[#008ffb] dark:text-white p-2 rounded block transition-all duration-300 hover:bg-[#008ffb] dark:hover:bg-white dark:hover:text-[#008ffb] hover:text-white shadow-[0px_0px_19px_-6px_#008ffb] dark:shadow-[0px_0px_6px_1px]"
       >
         Clear Filters
       </button>
@@ -232,24 +218,37 @@ const setFilter = (filter: any, event: any) => {
       <DataStatsOne />
     </div>
 
+    <div
+      class="dark:bg-boxdark flex flex-col items-center justify-center p-6 pb-10 mt-8 bg-[#FFFFFF] shadow-[1px_2px_55px_-18px_#00008070] dark:border dark:border-strokedark rounded-lg"
+    >
+      <div class="-mb-12">
+        <h1 class="text-[24px] text-center font-bold text-black dark:text-white mb-2 mt-4">
+          Satisfaction Score with Overall Experience
+        </h1>
+        <h2 class="text-[22px] text-center font-bold text-black dark:text-white">
+          (Top 2 Boxes Score)
+        </h2>
+      </div>
+      <Gauge />
+      <div class="flex w-full gap-[20px] justify-center">
+        <div class="border-r-4 border-[#c3c3c3] w-[25%]">
+          <RadialChart1 />
+          <span class="ml-4 font-bold text-base"> n={{ useDataStore().achieved }} </span>
+        </div>
+        <div class="w-[25%]">
+          <RadialChart2 />
+          <span class="font-bold text-base"> n={{ useDataStore().achieved }} </span>
+        </div>
+        <div class="border-l-4 border-[#c3c3c3] w-[25%]">
+          <RadialChart3 />
+          <span class="ml-4 font-bold text-base"> n={{ useDataStore().achieved }} </span>
+        </div>
+      </div>
+    </div>
+
     <div class="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
       <RadialChart />
       <BarChart />
-    </div>
-
-    <div
-      class="dark:bg-boxdark flex flex-col items-center justify-center p-6 xl:w-[70%] pb-10 mt-8 bg-[#FFFFFF] shadow-[1px_2px_55px_-18px_#00008070] dark:border dark:border-strokedark"
-    >
-      <div class="-mb-12">
-        <h1 class="text-xl font-bold text-black dark:text-white text-center">Satisfaction Score with Overall Experience</h1>
-        <h2 class="text-xl font-bold text-black dark:text-white text-center">(Top 2 Boxes Score)</h2>
-      </div>
-      <GaugeChart />
-      <div class="flex gap-8">
-        <div class=""><RadialChart1/></div>
-        <div class=""><RadialChart2/></div>
-        <div class=""><RadialChart3/></div>
-      </div>
     </div>
   </DefaultLayout>
 </template>

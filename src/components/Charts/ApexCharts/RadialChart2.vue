@@ -16,29 +16,26 @@ const data1 = ref({
     plotOptions: {
       radialBar: {
         hollow: {
-          size: '70%'
+          size: '60%'
         },
         dataLabels: {
           showOn: 'always',
           name: {
-            show: false,
+            show: false
           },
           value: {
             show: true,
-            fontSize: '25px',
+            fontSize: '28px',
             fontWeight: 'bold',
             color: '#000',
             offsetY: 10
           }
         }
       }
-    },
+    }
     // labels: ['Cricket']
   }
 })
-
-
-
 
 watch(
   () => [useDataStore().turn_around_time_top2],
@@ -49,25 +46,26 @@ watch(
 </script>
 
 <template>
-
-    <div class=" justify-between gap-4 sm:flex">
-      <div>
-        <h4 class="text-base font-semibold text-black dark:text-white text-center">
-            Satisfaction Score - Turnaround time of purpose of visit
-        </h4>
-      </div>
+  <div class="justify-center gap-4 sm:flex">
+    <div class="">
+      <h2 class="text-[20px] font-bold text-black dark:text-white text-center">
+        Satisfaction Score
+      </h2>
+      <h4 class="text-[18px] font-semibold text-black dark:text-white text-center">
+        Turnaround time of purpose of visit
+      </h4>
     </div>
-    <div class="flex mb-2">
-      <div id="TreeMap" class="mx-auto flex justify-center">
-        <VueApexCharts
-          type="radialBar"
-          height="200"
-          width="150"
-          :options="data1.chartOptions"
-          :series="data1.series"
-          ref="chart"
-        />
-      </div> 
+  </div>
+  <div class="flex mb-2">
+    <div id="TreeMap" class="mx-auto flex justify-center">
+      <VueApexCharts
+        type="radialBar"
+        height="250"
+        width="250"
+        :options="data1.chartOptions"
+        :series="data1.series"
+        ref="chart"
+      />
     </div>
-  
+  </div>
 </template>

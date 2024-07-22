@@ -16,23 +16,23 @@ const data1 = ref({
     plotOptions: {
       radialBar: {
         hollow: {
-          size: '70%'
+          size: '60%'
         },
         dataLabels: {
           showOn: 'always',
           name: {
-            show: false,
+            show: false
           },
           value: {
             show: true,
-            fontSize: '25px',
+            fontSize: '28px',
             fontWeight: 'bold',
             color: '#000',
             offsetY: 10
           }
         }
       }
-    },
+    }
     // labels: ['Cricket']
   }
 })
@@ -46,10 +46,13 @@ watch(
 </script>
 
 <template>
-  <div class=" justify-between gap-4 sm:flex">
-    <div>
-      <h4 class="text-base font-semibold text-black dark:text-white text-center">
-        Satisfaction Score - Quality of staff interaction
+  <div class="justify-center gap-4 sm:flex">
+    <div class="text-center">
+      <h2 class="text-[20px] font-bold text-black dark:text-white text-center">
+        Satisfaction Score
+      </h2>
+      <h4 class="text-[18px] font-semibold text-black dark:text-white text-center">
+        Quality of staff interaction
       </h4>
     </div>
   </div>
@@ -57,8 +60,8 @@ watch(
     <div id="TreeMap" class="mx-auto flex justify-center">
       <VueApexCharts
         type="radialBar"
-        height="200"
-        width="150"
+        height="250"
+        width="250"
         :options="data1.chartOptions"
         :series="data1.series"
         ref="chart"
