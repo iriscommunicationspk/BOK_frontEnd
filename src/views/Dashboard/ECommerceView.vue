@@ -5,10 +5,11 @@ import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import { useDataStore } from '@/stores/data'
 import RadialChart from '@/components/Charts/ApexCharts/RadialChart.vue'
 import BarChart from '@/components/Charts/ApexCharts/BarChart.vue'
-import Gauge from '@/components/Charts/ECharts/Guage.vue'
 import RadialChart1 from '@/components/Charts/ApexCharts/RadialChart1.vue'
 import RadialChart2 from '@/components/Charts/ApexCharts/RadialChart2.vue'
 import RadialChart3 from '@/components/Charts/ApexCharts/RadialChart3.vue'
+import TimelineChart from '@/components/Charts/ApexCharts/TimelineChart.vue'
+import Guage from '@/components/Charts/ECharts/Guage.vue'
 
 const dataStore = useDataStore()
 dataStore.fetchData() // Fetch and initialize data
@@ -86,6 +87,49 @@ const setFilter = (filter: any, event: any) => {
 <template>
   <DefaultLayout>
     <div class="flex justify-center gap-5 flex-wrap">
+      <!-- City -->
+
+      <div>
+        <label
+          for="city-filter"
+          class="block text-base font-semibold text-gray-900 dark:text-white ml-2"
+        >
+          City
+        </label>
+        <select
+          id="city-filter"
+          class="block py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer mb-5 ml-2"
+          @change="filterByCity"
+        >
+          <option selected>Choose an option</option>
+          <option class="text-black font-semibold p-5 text-base" value="Lahore">Lahore</option>
+          <option class="text-black font-semibold p-5 text-base" value="Karachi">Karachi</option>
+          <option class="text-black font-semibold p-5 text-base" value="Islamabad">
+            Islamabad
+          </option>
+        </select>
+      </div>
+
+      <!-- Branch -->
+
+      <div>
+        <label
+          for="branch-filter"
+          class="block text-base font-semibold text-gray-900 dark:text-white ml-2"
+        >
+          Branch
+        </label>
+        <select
+          id="branch-filter"
+          class="block py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer mb-5 ml-2"
+          @change="setFilter('branch', $event)"
+        >
+          <option selected>Choose an option</option>
+          <option class="text-black font-semibold p-5 text-base" value="ABCC">ABC</option>
+        </select>
+      </div>
+      <!-- Gender -->
+
       <div class="w-min">
         <label
           for="gender-filter"
@@ -124,27 +168,6 @@ const setFilter = (filter: any, event: any) => {
         </select>
       </div>
 
-      <div>
-        <label
-          for="city-filter"
-          class="block text-base font-semibold text-gray-900 dark:text-white ml-2"
-        >
-          City
-        </label>
-        <select
-          id="city-filter"
-          class="block py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer mb-5 ml-2"
-          @change="filterByCity"
-        >
-          <option selected>Choose an option</option>
-          <option class="text-black font-semibold p-5 text-base" value="Lahore">Lahore</option>
-          <option class="text-black font-semibold p-5 text-base" value="Karachi">Karachi</option>
-          <option class="text-black font-semibold p-5 text-base" value="Islamabad">
-            Islamabad
-          </option>
-        </select>
-      </div>
-
       <!-- purpose of visiting -->
 
       <div>
@@ -171,23 +194,6 @@ const setFilter = (filter: any, event: any) => {
             Loan Service
           </option>
           <option value="Withdraw" class="text-black font-semibold p-5 text-base">Withdraw</option>
-        </select>
-      </div>
-
-      <div>
-        <label
-          for="branch-filter"
-          class="block text-base font-semibold text-gray-900 dark:text-white ml-2"
-        >
-          Branch
-        </label>
-        <select
-          id="branch-filter"
-          class="block py-2.5 px-0 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer mb-5 ml-2"
-          @change="setFilter('branch', $event)"
-        >
-          <option selected>Choose an option</option>
-          <option class="text-black font-semibold p-5 text-base" value="ABCC">ABC</option>
         </select>
       </div>
     </div>
@@ -229,7 +235,7 @@ const setFilter = (filter: any, event: any) => {
           (Top 2 Boxes Score)
         </h2>
       </div>
-      <Gauge />
+      <Guage />
       <div class="flex w-full gap-[20px] justify-center">
         <div class="border-r-4 border-[#c3c3c3] w-[25%]">
           <RadialChart1 />
@@ -249,6 +255,10 @@ const setFilter = (filter: any, event: any) => {
     <div class="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
       <RadialChart />
       <BarChart />
+    </div>
+
+    <div class="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
+      <TimelineChart />
     </div>
   </DefaultLayout>
 </template>

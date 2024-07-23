@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useDataStore } from '@/stores/data';
 import { ref } from 'vue'
 // @ts-ignore
 import VueApexCharts from 'vue3-apexcharts'
@@ -9,58 +10,61 @@ const chart = ref(null)
 const data = {
   series: [
     {
-      data: [
-        {
-          x: 'Code',
-          y: [new Date('2019-03-02').getTime(), new Date('2019-03-04').getTime()]
-        },
-        {
-          x: 'Test',
-          y: [new Date('2019-03-04').getTime(), new Date('2019-03-08').getTime()]
-        },
-        {
-          x: 'Validation',
-          y: [new Date('2019-03-08').getTime(), new Date('2019-03-12').getTime()]
-        },
-        {
-          x: 'Deployment',
-          y: [new Date('2019-03-12').getTime(), new Date('2019-03-18').getTime()]
-        }
-      ]
+      name: 'Desktops',
+      data: [useDataStore().overAll_top2, useDataStore().overAll_top2, useDataStore().overAll_top2, useDataStore().overAll_top2]
     }
   ],
   chartOptions: {
     chart: {
       height: 350,
-      type: 'rangeBar'
-    },
-    plotOptions: {
-      bar: {
-        horizontal: true
+      type: 'line',
+      zoom: {
+        enabled: false
       }
     },
-    xaxis: {
-      type: 'datetime'
+    dataLabels: {
+      enabled: true
+    },
+    stroke: {
+      curve: 'straight'
+    },
+    title: {
+      // text: 'Product Trends by Month',
+      // align: 'left'
+    },
+    grid: {
+      row: {
+        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+        opacity: 0.5
+      }
     }
+    // xaxis: {
+    //   categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']
+    // }
   }
 }
 </script>
 
 <template>
   <div
-    class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-6"
+    class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-12"
   >
-    <div class="mb-3 justify-between gap-4 sm:flex">
+    <div class="mb-3 justify-center gap-4 sm:flex">
       <div>
-        <h4 class="text-xl font-bold text-black dark:text-white">TimeLine Chart Analytics</h4>
+        <h4 class="text-[24px] text-center font-bold text-black dark:text-white mb-2 mt-4">
+          Overall Satisfaction Trend
+        </h4>
+        <h1 class="text-[22px] text-center font-bold text-black dark:text-white">
+          (Top 2 Boxes Score)
+        </h1>
       </div>
     </div>
     <div class="mb-2">
       <div id="TreeMap" class="mx-auto flex justify-center">
         <VueApexCharts
-          type="rangeBar"
+          type="line"
           height="350"
-          width="700"
+          width="1300"
           :options="data.chartOptions"
           :series="data.series"
           ref="chart"
