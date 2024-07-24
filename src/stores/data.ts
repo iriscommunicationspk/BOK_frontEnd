@@ -19,6 +19,12 @@ interface DataItem {
   turn_around_time: string
   over_all_satisfactory: string
   Date: string // Assuming there is a date field
+ 
+}
+
+interface DataArrayItem {
+  date: string
+  percentage: number
 }
 
 export const useDataStore = defineStore({
@@ -69,6 +75,7 @@ export const useDataStore = defineStore({
       Date: ''
     },
     satisfaction_trend: [],
+    data_array: [] as DataArrayItem[],
     loader: false
   }),
   actions: {
@@ -78,6 +85,7 @@ export const useDataStore = defineStore({
         this.data = response.data
         this.originalData = [...response.data] // Store original data
         this.filteredData = this.data // Initialize filteredData with all data
+        this.getOverallTop2ArrayByDate();
         console.log(this.data) // Log the fetched data
         console.log(this.staff_interaction_highly)
 
@@ -133,7 +141,9 @@ export const useDataStore = defineStore({
       console.log('Filtered data:', this.filteredData) // Log the filtered data
 
       this.updateStatistics()
-      this.getOverallTop2ArrayByDate()
+      this.data_array = [...this.getOverallTop2ArrayByDate()];
+      console.log('data.ts', this.data_array);
+      
     },
     updateStatistics() {
       console.log('Updating statistics...')
@@ -299,13 +309,14 @@ export const useDataStore = defineStore({
       for (const [date, counts] of Object.entries(groupedByDate)) {
         overallTop2ByDate.push({
           date: date,
-          percentage: ((counts.high + counts.highly) / this.achieved) * 100
+          percentage: Math.floor(((counts.high + counts.highly) / this.achieved) * 100)
         })
       }
-
+      this.data_array = [...overallTop2ByDate];
       console.log('data.ts', overallTop2ByDate)
       return overallTop2ByDate
     },
+    
     setGender(gender: string) {
       this.filters.gender = gender
       this.applyFilters()
@@ -354,6 +365,7 @@ export const useDataStore = defineStore({
       this.filters.branch = ''
       this.filteredData = [...this.originalData]
       this.updateStatistics()
+      this.getOverallTop2ArrayByDate()
     }
   }
 })

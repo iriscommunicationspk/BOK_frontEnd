@@ -1,22 +1,59 @@
 <script setup lang="ts">
 import { useDataStore } from '@/stores/data'
-import { ref, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 // @ts-ignore
 import VueApexCharts from 'vue3-apexcharts'
-// import moment from 'moment'
+
+const dataStore = useDataStore()
 
 const chart = ref(null)
 
-const data = ref({
+// Use computed to create a reactive reference to the data_array in the store
+const data_array = computed(() => dataStore.data_array)
+
+console.log('data', data_array.value)
+
+interface ChartData {
+  series: {
+    name: string;
+    data: number[];
+  }[];
+  chartOptions: {
+    chart: {
+      height: number;
+      type: string;
+      zoom: {
+        enabled: boolean;
+      };
+    };
+    dataLabels: {
+      enabled: boolean;
+    };
+    stroke: {
+      curve: string;
+    };
+    title: {
+      text?: string;
+      align?: string;
+    };
+  
+    grid: {
+      row: {
+        colors: string[];
+        opacity: number;
+      };
+    };
+    xaxis: {
+      categories: string[];
+    };
+  };
+}
+
+const data = ref<ChartData>({
   series: [
     {
-      name: 'OverAll',
-      data: [
-        useDataStore().overAll_top2,
-        useDataStore().overAll_top2,
-        useDataStore().overAll_top2,
-        useDataStore().overAll_top2
-      ]
+      name: 'Overall',
+      data: [] // This will be updated with percentages
     }
   ],
   chartOptions: {
@@ -34,34 +71,28 @@ const data = ref({
       curve: 'straight'
     },
     title: {
-      // text: 'Product Trends by Month',
-      // align: 'left'
+      // text: 'Overall Satisfaction Trend',
+      // align: 'lfeft'
     },
-    yaxis: {
-      min: 0, // Set the minimum value for the x-axis
-      max: 100 // Set the maximum value for the x-axis
-    },
+    
     grid: {
       row: {
-        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on rows
         opacity: 0.5
       }
+    },
+    xaxis: {
+      categories: [] // This will be updated with dates
     }
-    // xaxis: {
-    //   categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']
-    // }
   }
 })
 
-watch(
-  () => [useDataStore().overAll_top2],
-  ([overAll_top2]) => {
-    data.value.series[0].data[0] = overAll_top2
-    data.value.series[0].data[1] = overAll_top2
-    data.value.series[0].data[2] = overAll_top2
-    data.value.series[0].data[3] = overAll_top2
-  }
-)
+// Watch for changes in data_array and update the chart data accordingly
+watch(data_array, (newData) => {
+  data.value.series[0].data = newData.map(item => item.percentage)
+  data.value.chartOptions.xaxis.categories = newData.map(item => item.date)
+}, { immediate: true })
+
 </script>
 
 <template>
@@ -90,5 +121,6 @@ watch(
         />
       </div>
     </div>
+ 
   </div>
 </template>
