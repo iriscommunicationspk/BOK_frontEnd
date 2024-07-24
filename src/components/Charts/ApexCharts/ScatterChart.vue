@@ -128,7 +128,7 @@ const data = {
     xaxis: {
       tickAmount: 10,
       labels: {
-        formatter: function (val) {
+        formatter: function (val: any) {
           return parseFloat(val).toFixed(1)
         }
       }

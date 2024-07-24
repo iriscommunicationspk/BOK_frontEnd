@@ -24,7 +24,7 @@ const data = ref({
           y: useDataStore().loan_service
         },
         {
-          x: 'withdrawal',
+          x: 'Withdrawal',
           y: useDataStore().withdrawal
         },
         {
@@ -50,26 +50,37 @@ const data = ref({
         horizontal: true
       }
     },
-    colors: ['#1584e7'],
+    colors: ['#36099e'],
     dataLabels: {
       enabled: true,
       formatter: function (val: any) {
         return val + '%' // Add percentage sign to the value
       },
       style: {
-        colors: ['#FFFFFF'] // Change text color if needed
+        colors: ['#FFFFFF'], // Change text color if needed
+
+        fontSize: '14px', // Change font size if needed
+
+        fontWeight: 'bold' // Change font weight if needed
       }
     },
     xaxis: {
-      min: 0, // Set the minimum value for the x-axis
-      max: 100 // Set the maximum value for the x-axis
+      labels: {
+        show: false // Hide x-axis labels
+      },
+      axisBorder: {
+        show: false // Hide x-axis border
+      },
+      axisTicks: {
+        show: false // Hide x-axis ticks
+      }
     },
     legend: {
       show: false,
       showForSingleSeries: true,
       customLegendItems: ['Actual', 'Expected'],
       markers: {
-        fillColors: ['#00E396', '#775DD0']
+        fillColors: ['#red', '#775DD0']
       }
     }
   }

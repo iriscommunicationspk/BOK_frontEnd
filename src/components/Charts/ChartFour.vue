@@ -47,7 +47,7 @@ const gradientOptions = {
       ],
       tickAmount: 10,
       labels: {
-        formatter: function (value, timestamp, opts) {
+        formatter: function (value: any, timestamp: any, opts: any) {
           return opts.dateFormatter(new Date(timestamp), 'dd MMM')
         }
       }

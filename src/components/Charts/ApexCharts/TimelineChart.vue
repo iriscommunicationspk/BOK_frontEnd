@@ -1,17 +1,22 @@
 <script setup lang="ts">
-import { useDataStore } from '@/stores/data';
-import { ref } from 'vue'
+import { useDataStore } from '@/stores/data'
+import { ref, watch } from 'vue'
 // @ts-ignore
 import VueApexCharts from 'vue3-apexcharts'
 // import moment from 'moment'
 
 const chart = ref(null)
 
-const data = {
+const data = ref({
   series: [
     {
-      name: 'Desktops',
-      data: [useDataStore().overAll_top2, useDataStore().overAll_top2, useDataStore().overAll_top2, useDataStore().overAll_top2]
+      name: 'OverAll',
+      data: [
+        useDataStore().overAll_top2,
+        useDataStore().overAll_top2,
+        useDataStore().overAll_top2,
+        useDataStore().overAll_top2
+      ]
     }
   ],
   chartOptions: {
@@ -32,6 +37,10 @@ const data = {
       // text: 'Product Trends by Month',
       // align: 'left'
     },
+    yaxis: {
+      min: 0, // Set the minimum value for the x-axis
+      max: 100 // Set the maximum value for the x-axis
+    },
     grid: {
       row: {
         colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
@@ -42,7 +51,17 @@ const data = {
     //   categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep']
     // }
   }
-}
+})
+
+watch(
+  () => [useDataStore().overAll_top2],
+  ([overAll_top2]) => {
+    data.value.series[0].data[0] = overAll_top2
+    data.value.series[0].data[1] = overAll_top2
+    data.value.series[0].data[2] = overAll_top2
+    data.value.series[0].data[3] = overAll_top2
+  }
+)
 </script>
 
 <template>

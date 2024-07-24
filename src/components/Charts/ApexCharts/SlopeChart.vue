@@ -96,7 +96,7 @@ const data = {
       background: {
         enabled: true
       },
-      formatter(val, opts) {
+      formatter(val: any, opts: any) {
         const seriesName = opts.w.config.series[opts.seriesIndex].name
         return val !== null ? seriesName : ''
       }

@@ -5,7 +5,7 @@ import VueApexCharts from 'vue3-apexcharts'
 
 const chart = ref(null)
 
-function generateDayWiseTimeSeries(baseval, count, yrange) {
+function generateDayWiseTimeSeries(baseval: any, count: any, yrange: any) {
   var i = 0
   var series = []
   while (i < count) {
@@ -48,7 +48,7 @@ const data = {
       height: 350,
       stacked: true,
       events: {
-        selection: function (chart, e) {
+        selection: function (chart: any, e: any) {
           console.log(new Date(e.xaxis.min))
         }
       }

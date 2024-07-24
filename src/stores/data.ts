@@ -18,7 +18,7 @@ interface DataItem {
   purpose_of_visit: string
   turn_around_time: string
   over_all_satisfactory: string
-  // widrawing_money: string
+  Date: string // Assuming there is a date field
 }
 
 export const useDataStore = defineStore({
@@ -65,14 +65,16 @@ export const useDataStore = defineStore({
       transferring_fund: '',
       loan_service: '',
       branch: '',
-      withdrawal: ''
+      withdrawal: '',
+      Date: ''
     },
+    satisfaction_trend: [],
     loader: false
   }),
   actions: {
     async fetchData() {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/get-gender')
+        const response = await axios.get(`${import.meta.env.VITE_APP_ENDPOINT}get-gender`)
         this.data = response.data
         this.originalData = [...response.data] // Store original data
         this.filteredData = this.data // Initialize filteredData with all data
@@ -131,6 +133,7 @@ export const useDataStore = defineStore({
       console.log('Filtered data:', this.filteredData) // Log the filtered data
 
       this.updateStatistics()
+      this.getOverallTop2ArrayByDate()
     },
     updateStatistics() {
       console.log('Updating statistics...')
@@ -274,6 +277,35 @@ export const useDataStore = defineStore({
 
       console.log('Top 2 Boxes = ', this.overAll_top2, '%')
     },
+    getOverallTop2ArrayByDate() {
+      const overallTop2ByDate: { date: string; percentage: number }[] = []
+
+      const groupedByDate = this.filteredData.reduce(
+        (acc, item) => {
+          const date = item.Date
+          console.log(date)
+          if (!acc[date]) {
+            acc[date] = { high: 0, highly: 0 }
+          }
+
+          acc[date].high += item.over_all_satisfactory === 'Highly satisfied' ? 1 : 0
+          acc[date].highly += item.over_all_satisfactory === 'Somewhat Satisfied' ? 1 : 0
+
+          return acc
+        },
+        {} as Record<string, { high: number; highly: number }>
+      )
+
+      for (const [date, counts] of Object.entries(groupedByDate)) {
+        overallTop2ByDate.push({
+          date: date,
+          percentage: ((counts.high + counts.highly) / this.achieved) * 100
+        })
+      }
+
+      console.log('data.ts', overallTop2ByDate)
+      return overallTop2ByDate
+    },
     setGender(gender: string) {
       this.filters.gender = gender
       this.applyFilters()
@@ -308,7 +340,6 @@ export const useDataStore = defineStore({
     },
     setBranch(branch: string) {
       console.log('set branch', branch)
-
       this.filters.branch = branch
       this.applyFilters()
     },

@@ -10,6 +10,7 @@ import RadialChart2 from '@/components/Charts/ApexCharts/RadialChart2.vue'
 import RadialChart3 from '@/components/Charts/ApexCharts/RadialChart3.vue'
 import TimelineChart from '@/components/Charts/ApexCharts/TimelineChart.vue'
 import Guage from '@/components/Charts/ECharts/Guage.vue'
+import GradientPirChart from '@/components/Charts/ApexCharts/GradientPirChart.vue'
 
 const dataStore = useDataStore()
 dataStore.fetchData() // Fetch and initialize data
@@ -82,6 +83,8 @@ const setFilter = (filter: any, event: any) => {
     console.log('in else')
   }
 }
+
+console.log('asdasdas', dataStore.getOverallTop2ArrayByDate())
 </script>
 
 <template>
@@ -253,7 +256,8 @@ const setFilter = (filter: any, event: any) => {
     </div>
 
     <div class="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-      <RadialChart />
+      <!-- <RadialChart /> -->
+      <GradientPirChart />
       <BarChart />
     </div>
 
