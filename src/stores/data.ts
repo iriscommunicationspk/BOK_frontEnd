@@ -19,7 +19,6 @@ interface DataItem {
   turn_around_time: string
   over_all_satisfactory: string
   Date: string // Assuming there is a date field
- 
 }
 
 interface DataArrayItem {
@@ -85,9 +84,9 @@ export const useDataStore = defineStore({
         this.data = response.data
         this.originalData = [...response.data] // Store original data
         this.filteredData = this.data // Initialize filteredData with all data
-        this.getOverallTop2ArrayByDate();
-        console.log(this.data) // Log the fetched data
-        console.log(this.staff_interaction_highly)
+        this.getOverallTop2ArrayByDate()
+        // console.log(this.data) // Log the fetched data
+        // console.log(this.staff_interaction_highly)
 
         this.applyFilters()
         this.loader = true
@@ -133,20 +132,19 @@ export const useDataStore = defineStore({
       }
 
       if (this.filters.branch) {
-        console.log('Filtering by branch:', this.filters.branch)
+        // console.log('Filtering by branch:', this.filters.branch)
         filtered = filtered.filter((item) => item.branch === this.filters.branch)
       }
 
       this.filteredData = filtered
-      console.log('Filtered data:', this.filteredData) // Log the filtered data
+      // console.log('Filtered data:', this.filteredData) // Log the filtered data
 
       this.updateStatistics()
-      this.data_array = [...this.getOverallTop2ArrayByDate()];
-      console.log('data.ts', this.data_array);
-      
+      this.data_array = [...this.getOverallTop2ArrayByDate()]
+      // console.log('data.ts', this.data_array)
     },
     updateStatistics() {
-      console.log('Updating statistics...')
+      // console.log('Updating statistics...')
 
       const total = this.filteredData.length
 
@@ -194,27 +192,27 @@ export const useDataStore = defineStore({
         (item) => item.staff_interaction == 'Highly satisfied'
       ).length
 
-      console.log('Count = ', staff_interaction_highly)
+      // console.log('Count = ', staff_interaction_highly)
       this.staff_interaction_highly = total
         ? Math.floor((staff_interaction_highly / total) * 100)
         : 0
 
-      console.log('Percentage = ', this.staff_interaction_highly, '%')
+      // console.log('Percentage = ', this.staff_interaction_highly, '%')
 
       const staff_interaction_high = this.filteredData.filter(
         (item) => item.staff_interaction == 'Somewhat Satisfied'
       ).length
 
-      console.log('Count = ', staff_interaction_high)
+      // console.log('Count = ', staff_interaction_high)
       this.staff_interaction_high = total ? Math.floor((staff_interaction_high / total) * 100) : 0
 
-      console.log('Percentage = ', this.staff_interaction_high, '%')
+      // console.log('Percentage = ', this.staff_interaction_high, '%')
 
-      console.log(
-        'Top 2 Boxes = ',
-        this.staff_interaction_high + this.staff_interaction_highly,
-        '%'
-      )
+      // console.log(
+      //   'Top 2 Boxes = ',
+      //   this.staff_interaction_high + this.staff_interaction_highly,
+      //   '%'
+      // )
       this.staff_int_top2 = this.staff_interaction_high + this.staff_interaction_highly
 
       // purpose_of_visit - Top 2 boxes
@@ -223,19 +221,19 @@ export const useDataStore = defineStore({
         (item) => item.purpose_of_visit == 'Highly satisfied'
       ).length
 
-      console.log('purpose_of_visit_high Count = ', purpose_of_visit_high)
+      // console.log('purpose_of_visit_high Count = ', purpose_of_visit_high)
       this.purpose_of_visit_high = total ? Math.floor((purpose_of_visit_high / total) * 100) : 0
 
-      console.log('purpose_of_visit_high Percentage = ', this.purpose_of_visit_high, '%')
+      // console.log('purpose_of_visit_high Percentage = ', this.purpose_of_visit_high, '%')
 
       const purpose_of_visit_highly = this.filteredData.filter(
         (item) => item.purpose_of_visit == 'Somewhat Satisfied'
       ).length
 
-      console.log('purpose_of_visit_highly Count = ', purpose_of_visit_highly)
+      //console.log('purpose_of_visit_highly Count = ', purpose_of_visit_highly)
       this.purpose_of_visit_highly = total ? Math.floor((purpose_of_visit_highly / total) * 100) : 0
 
-      console.log('purpose_of_visit_highly Percentage = ', this.purpose_of_visit_highly, '%')
+      //console.log('purpose_of_visit_highly Percentage = ', this.purpose_of_visit_highly, '%')
 
       this.purpose_of_visit_top2 = this.purpose_of_visit_high + this.purpose_of_visit_highly
 
@@ -245,23 +243,23 @@ export const useDataStore = defineStore({
         (item) => item.turn_around_time == 'Highly satisfied'
       ).length
 
-      console.log('Turn around time Count high = ', turn_around_time_high)
+      // console.log('Turn around time Count high = ', turn_around_time_high)
       this.turn_around_time_high = total ? Math.floor((turn_around_time_high / total) * 100) : 0
 
-      console.log('Turn around time Percentage high = ', this.turn_around_time_high, '%')
+      //console.log('Turn around time Percentage high = ', this.turn_around_time_high, '%')
 
       const turn_around_time_highly = this.filteredData.filter(
         (item) => item.turn_around_time == 'Somewhat Satisfied'
       ).length
 
-      console.log('Turn around time Count highly = ', turn_around_time_highly)
+      //console.log('Turn around time Count highly = ', turn_around_time_highly)
       this.turn_around_time_highly = total ? Math.floor((turn_around_time_highly / total) * 100) : 0
 
-      console.log('Turn around time Percentage highly = ', this.turn_around_time_highly, '%')
+      //console.log('Turn around time Percentage highly = ', this.turn_around_time_highly, '%')
 
       this.turn_around_time_top2 = this.turn_around_time_high + this.turn_around_time_highly
 
-      console.log('Top 2 Boxes = ', this.turn_around_time_top2, '%')
+      ///console.log('Top 2 Boxes = ', this.turn_around_time_top2, '%')
 
       // over_all_satisfactory - Top 2 boxes
 
@@ -269,23 +267,23 @@ export const useDataStore = defineStore({
         (item) => item.over_all_satisfactory == 'Highly satisfied'
       ).length
 
-      console.log('Overall high Count= ', over_all_high)
+      //console.log('Overall high Count= ', over_all_high)
       this.overAll_high = total ? Math.floor((over_all_high / total) * 100) : 0
 
-      console.log('Overall high Percentage= ', this.overAll_high, '%')
+      //console.log('Overall high Percentage= ', this.overAll_high, '%')
 
       const over_all_highly = this.filteredData.filter(
         (item) => item.over_all_satisfactory == 'Somewhat Satisfied'
       ).length
 
-      console.log('Overall highly Count= ', over_all_highly)
+      //console.log('Overall highly Count= ', over_all_highly)
       this.overAll_highly = total ? Math.floor((over_all_highly / total) * 100) : 0
 
-      console.log('Overall highly Percentage = ', this.overAll_highly, '%')
+      //console.log('Overall highly Percentage = ', this.overAll_highly, '%')
 
       this.overAll_top2 = this.overAll_high + this.overAll_highly
 
-      console.log('Top 2 Boxes = ', this.overAll_top2, '%')
+      //console.log('Top 2 Boxes = ', this.overAll_top2, '%')
     },
     getOverallTop2ArrayByDate() {
       const overallTop2ByDate: { date: string; percentage: number }[] = []
@@ -293,7 +291,7 @@ export const useDataStore = defineStore({
       const groupedByDate = this.filteredData.reduce(
         (acc, item) => {
           const date = item.Date
-          console.log(date)
+          // console.log(date)
           if (!acc[date]) {
             acc[date] = { high: 0, highly: 0 }
           }
@@ -312,11 +310,11 @@ export const useDataStore = defineStore({
           percentage: Math.floor(((counts.high + counts.highly) / this.achieved) * 100)
         })
       }
-      this.data_array = [...overallTop2ByDate];
-      console.log('data.ts', overallTop2ByDate)
+      this.data_array = [...overallTop2ByDate]
+      // console.log('data.ts', overallTop2ByDate)
       return overallTop2ByDate
     },
-    
+
     setGender(gender: string) {
       this.filters.gender = gender
       this.applyFilters()

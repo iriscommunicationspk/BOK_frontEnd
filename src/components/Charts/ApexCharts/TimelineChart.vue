@@ -2,51 +2,53 @@
 import { useDataStore } from '@/stores/data'
 import { ref, computed, watch } from 'vue'
 // @ts-ignore
-import VueApexCharts from 'vue3-apexcharts'
+import VueApexCharts, { type VueApexChartsComponent } from 'vue3-apexcharts'
 
 const dataStore = useDataStore()
 
-const chart = ref(null)
+const chart = ref<VueApexChartsComponent | null>(null) // Explicitly type chart.value as VueApexCharts | null
 
 // Use computed to create a reactive reference to the data_array in the store
 const data_array = computed(() => dataStore.data_array)
 
-console.log('data', data_array.value)
-
 interface ChartData {
   series: {
-    name: string;
-    data: number[];
-  }[];
+    name: string
+    data: number[]
+  }[]
   chartOptions: {
     chart: {
-      height: number;
-      type: string;
+      height: number
+      type: string
       zoom: {
-        enabled: boolean;
-      };
-    };
+        enabled: boolean
+      }
+    }
+    colors: string[]
     dataLabels: {
-      enabled: boolean;
-    };
+      enabled: boolean
+    }
     stroke: {
-      curve: string;
-    };
+      curve: string
+    }
     title: {
-      text?: string;
-      align?: string;
-    };
-  
+      text?: string
+      align?: string
+    }
     grid: {
       row: {
-        colors: string[];
-        opacity: number;
-      };
-    };
+        colors: string[]
+        opacity: number
+      }
+    }
     xaxis: {
-      categories: string[];
-    };
-  };
+      categories: string[]
+    }
+    responsive: {
+      breakpoint: number
+      options: Record<string, any>
+    }[]
+  }
 }
 
 const data = ref<ChartData>({
@@ -64,6 +66,8 @@ const data = ref<ChartData>({
         enabled: false
       }
     },
+    colors: ['#32a852'], // Change the line color
+
     dataLabels: {
       enabled: true
     },
@@ -72,9 +76,8 @@ const data = ref<ChartData>({
     },
     title: {
       // text: 'Overall Satisfaction Trend',
-      // align: 'lfeft'
+      // align: 'left'
     },
-    
     grid: {
       row: {
         colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on rows
@@ -83,16 +86,75 @@ const data = ref<ChartData>({
     },
     xaxis: {
       categories: [] // This will be updated with dates
-    }
+    },
+    responsive: [
+      {
+        breakpoint: 1024,
+        options: {
+          chart: {
+            width: '900px'
+          }
+        }
+      },
+      {
+        breakpoint: 1441,
+        options: {
+          chart: {
+            width: '800px'
+          }
+        }
+      },
+      {
+        breakpoint: 1170,
+        options: {
+          chart: {
+            width: '700px'
+          }
+        }
+      },
+      {
+        breakpoint: 2160,
+        options: {
+          chart: {
+            width: '1200px'
+          }
+        }
+      },
+      {
+        breakpoint: 768,
+        options: {
+          chart: {
+            width: '1200px'
+          }
+        }
+      },
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: '100%'
+          }
+        }
+      }
+    ]
   }
 })
 
 // Watch for changes in data_array and update the chart data accordingly
-watch(data_array, (newData) => {
-  data.value.series[0].data = newData.map(item => item.percentage)
-  data.value.chartOptions.xaxis.categories = newData.map(item => item.date)
-}, { immediate: true })
+watch(
+  data_array,
+  (newData) => {
+    data.value.series[0].data = newData.map((item) => item.percentage)
+    data.value.chartOptions.xaxis.categories = newData.map((item) => item.date)
 
+    // Force update the chart
+    if (chart.value) {
+      chart.value.updateSeries(data.value.series)
+      chart.value.updateOptions(data.value.chartOptions)
+    }
+  },
+  { deep: true, immediate: true }
+)
 </script>
 
 <template>
@@ -110,17 +172,22 @@ watch(data_array, (newData) => {
       </div>
     </div>
     <div class="mb-2">
-      <div id="TreeMap" class="mx-auto flex justify-center">
+      <div id="TreeMap" class="mx-auto flex justify-center w-full">
         <VueApexCharts
           type="line"
           height="350"
-          width="1300"
           :options="data.chartOptions"
           :series="data.series"
           ref="chart"
         />
       </div>
     </div>
- 
   </div>
 </template>
+
+<style>
+/* Ensure the container div is responsive */
+#TreeMap {
+  width: 100%;
+}
+</style>

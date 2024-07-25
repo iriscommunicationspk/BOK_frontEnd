@@ -72,7 +72,7 @@ watch(
   ([newAccountHolder, newNoneAccountHolder, achieved, total]) => {
     achieved_percentage.value = Math.floor((achieved / total) * 100)
     series.value = [newAccountHolder, newNoneAccountHolder]
-    console.log(newAccountHolder, newNoneAccountHolder)
+    // console.log(newAccountHolder, newNoneAccountHolder)
   }
 )
 </script>

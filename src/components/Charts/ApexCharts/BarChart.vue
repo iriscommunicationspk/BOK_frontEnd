@@ -75,6 +75,26 @@ const data = ref({
         show: false // Hide x-axis ticks
       }
     },
+    responsive: [
+      {
+        breakpoint: 1000,
+        options: {
+          plotOptions: {
+            bar: {
+              horizontal: false
+            }
+          },
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    ],
+    stroke: {
+      width: 1,
+      colors: ['#fff']
+    },
+
     legend: {
       show: false,
       showForSingleSeries: true,

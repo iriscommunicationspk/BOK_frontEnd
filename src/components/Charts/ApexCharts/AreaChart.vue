@@ -49,7 +49,7 @@ const data = {
       stacked: true,
       events: {
         selection: function (chart: any, e: any) {
-          console.log(new Date(e.xaxis.min))
+          // console.log(new Date(e.xaxis.min))
         }
       }
     },
