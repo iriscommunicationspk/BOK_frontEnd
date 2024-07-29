@@ -146,7 +146,7 @@ watch(
           ref="chart"
         />
       </div>
-      <span class="ml-4 font-bold text-base float-right"> n={{ useDataStore().achieved }} </span>
+      <span class="ml-4 font-bold text-[14px] text-black/40 float-right"> n={{ useDataStore().achieved }} </span>
     </div>
   </div>
 </template>

@@ -27,6 +27,7 @@ interface ChartData {
     colors: string[]
     dataLabels: {
       enabled: boolean
+      formatter: (val: any, opts: any) => string
     }
     stroke: {
       curve: string
@@ -69,10 +70,15 @@ const data = ref<ChartData>({
     colors: ['#32a852'], // Change the line color
 
     dataLabels: {
-      enabled: true
+      enabled: true,
+      formatter: function (val :any, opts:any) {
+      const total = opts.w.globals.seriesTotals.reduce((a:any, b:any) => a + b, 0)
+      const percent = (opts.w.globals.series[opts.seriesIndex] / total) * 100
+      return  val + '%'
+    },
     },
     stroke: {
-      curve: 'straight'
+      curve: 'smooth'
     },
     title: {
       // text: 'Overall Satisfaction Trend',

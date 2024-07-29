@@ -245,15 +245,16 @@ const setFilter = (filter: any, event: any) => {
         <div class="lg:flex w-full gap-[20px] justify-center">
           <div class="lg:border-r-4 border-[#c3c3c3] lg:w-[25%]">
             <RadialChart1 />
-            <span class="ml-4 font-bold text-base"> n={{ useDataStore().achieved }} </span>
+            <span class="ml-4 font-bold text-[14px] text-black/40 "> n={{ useDataStore().achieved }} </span>
           </div>
           <div class="lg:w-[25%]">
             <RadialChart2 />
-            <span class="font-bold text-base"> n={{ useDataStore().achieved }} </span>
+            
+            <span class="ml-4 font-bold text-[14px] text-black/40 "> n={{ useDataStore().achieved }} </span>
           </div>
           <div class="lg:border-l-4 border-[#c3c3c3] lg:w-[25%]">
             <RadialChart3 />
-            <span class="ml-4 font-bold text-base"> n={{ useDataStore().achieved }} </span>
+            <span class="ml-8 font-bold text-[14px] text-black/40 "> n={{ useDataStore().achieved }} </span>
           </div>
         </div>
       </div>

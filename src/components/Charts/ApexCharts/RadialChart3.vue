@@ -1,14 +1,22 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watchEffect, computed } from 'vue'
 // @ts-ignore
 import VueApexCharts from 'vue3-apexcharts'
 import { useDataStore } from '@/stores/data'
 
 const chart = ref(null)
+const dataStore = useDataStore()
+
+const getColor = (value: number): string => {
+  if(value>=0 && value<=25) return '#FF4560';   
+  if(value>25 && value<=50) return '#FDDD60';  
+  if(value>50 && value<=75) return '#58D9F9';
+  return '#7CFFB2'; // Red for low values
+}
 
 const data1 = ref({
-  series: [useDataStore().staff_int_top2],
-  chartOptions: {
+  series: [dataStore.staff_int_top2],
+  chartOptions: computed(() => ({
     chart: {
       height: 350,
       type: 'radialBar'
@@ -16,7 +24,7 @@ const data1 = ref({
     plotOptions: {
       radialBar: {
         hollow: {
-          size: '60%'
+          size: '55%'
         },
         dataLabels: {
           showOn: 'always',
@@ -32,27 +40,28 @@ const data1 = ref({
           }
         }
       }
-    }
-    // labels: ['Cricket']
-  }
+    },
+    fill: {
+      colors: [getColor(dataStore.overAll_top2)]
+    },
+    labels: ['']
+  }))
 })
 
-watch(
-  () => [useDataStore().staff_int_top2],
-  ([staff_int_top2]) => {
-    data1.value.series = [staff_int_top2]
-  }
-)
+watchEffect(() => {
+  data1.value.series = [dataStore.staff_int_top2]
+  data1.value.chartOptions.fill.colors = [getColor(dataStore.overAll_top2)]
+})
 </script>
 
 <template>
   <div class="justify-center gap-4 sm:flex">
-    <div class="text-center">
+    <div class="">
       <h2 class="text-[20px] font-bold text-black dark:text-white text-center">
         Satisfaction Score
       </h2>
       <h4 class="text-[18px] font-semibold text-black dark:text-white text-center">
-        Quality of staff interaction
+        Fulfillment of purpose of visit
       </h4>
     </div>
   </div>

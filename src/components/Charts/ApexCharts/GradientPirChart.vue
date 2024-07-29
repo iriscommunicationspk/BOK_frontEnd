@@ -22,7 +22,7 @@ const data = ref({
           minAngleToShowLabel: 10
         },
         donut: {
-          size: '80%',
+          size: '60%',
           labels: {
             show: true,
             // name: {
@@ -48,7 +48,7 @@ const data = ref({
               }
             },
             total: {
-              show: true,
+              show: false,
               showAlways: false,
               label: 'Total',
               fontSize: '14px',
@@ -67,18 +67,36 @@ const data = ref({
       }
     },
     dataLabels: {
-      enabled: false,
+      enabled: true,
+      formatter: function (val :any, opts:any) {
+      const total = opts.w.globals.seriesTotals.reduce((a:any, b:any) => a + b, 0)
+      const percent = (opts.w.globals.series[opts.seriesIndex] / total) * 100
+      return Math.floor(percent) + '%'
+    },
       style: {
-        colors: ['#000', '#fff'] // Text colors for data labels (adjust as needed)
+        colors: ['#000', '#fff'], // Text colors for data labels (adjust as needed)
+        fontSize: '15px'
       },
-      background: {
-        enabled: true,
-        foreColor: '#000', // Color of text inside the background
-        borderRadius: 0,
-        dropShadow: {
-          enabled: false
-        }
-      }
+    //   style: {
+    //   colors: ['#FFFFFF', '#FFFFFF'], // Change text color of data labels
+    //   fontSize: '18px'
+    // },
+    dropShadow: {
+      enabled: true,
+      top: 1,
+      left: 1,
+      blur: 2,
+      opacity: 1,
+      color: '#FFFFFF' // Change color of the percentage text shadow
+    }
+      // background: {
+      //   enabled: true,
+      //   foreColor: '#000', // Color of text inside the background
+      //   borderRadius: 0,
+      //   dropShadow: {
+      //     enabled: false
+      //   }
+      // }
     },
     fill: {
       type: 'gradient',
@@ -86,7 +104,7 @@ const data = ref({
         shade: 'light',
         type: 'horizontal', // 'horizontal', 'vertical', 'diagonal1', 'diagonal2'
         shadeIntensity: 0.5,
-        gradientToColors: ['#1A73E1', '#FABB3D'], // Corresponding gradient colors
+        gradientToColors: [ '#FABB3D'], // Corresponding gradient colors
         inverseColors: true,
         opacityFrom: 1,
         opacityTo: 1,
@@ -154,7 +172,7 @@ watch(
           ref="chart"
         />
       </div>
-      <span class="ml-4 font-bold text-base float-right"> n={{ useDataStore().achieved }} </span>
+      <span class="ml-4 font-bold text-[14px] text-black/40 float-right"> n={{ useDataStore().achieved }} </span>
     </div>
   </div>
 </template>

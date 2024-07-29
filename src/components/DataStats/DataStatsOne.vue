@@ -8,7 +8,7 @@ const chart = ref(null)
 
 // Update the chart options
 
-const series = ref([useDataStore().account_holder, useDataStore().none_account_holder])
+  const series = ref([Math.floor(useDataStore().account_holder), Math.floor(useDataStore().none_account_holder)])
 const chartOptions = ref({
   chart: {
     width: 200,
@@ -20,21 +20,28 @@ const chartOptions = ref({
       }
     }
   },
-  labels: ['Account Holders', 'None account Holders'], // Remove labels by setting this to an empty array
+  labels: ['Account Holders of BAFL', 'None account Holders of BAFL'], // Remove labels by setting this to an empty array
   plotOptions: {
     pie: {
       showLabels: false // Explicitly hide labels
     }
   },
   dataLabels: {
+    enabled: true,
+    formatter: function (val :any, opts:any) {
+      const total = opts.w.globals.seriesTotals.reduce((a:any, b:any) => a + b, 0)
+      const percent = (opts.w.globals.series[opts.seriesIndex] / total) * 100
+      return Math.floor(percent) + '%'
+    },
     style: {
-      colors: ['#FFFFFF', '#FFFFFF'] // Change text color of data labels
+      colors: ['#FFFFFF', '#FFFFFF'], // Change text color of data labels
+      fontSize: '18px'
     },
     dropShadow: {
       enabled: true,
       top: 1,
       left: 1,
-      blur: 1,
+      blur: 2,
       opacity: 1,
       color: '#FFFFFF' // Change color of the percentage text shadow
     }
@@ -71,7 +78,7 @@ watch(
   ],
   ([newAccountHolder, newNoneAccountHolder, achieved, total]) => {
     achieved_percentage.value = Math.floor((achieved / total) * 100)
-    series.value = [newAccountHolder, newNoneAccountHolder]
+    series.value = [Math.floor(newAccountHolder), Math.floor(newNoneAccountHolder)]
     // console.log(newAccountHolder, newNoneAccountHolder)
   }
 )
@@ -151,14 +158,14 @@ watch(
 
       <div v-if="useDataStore().loader" class="flex flex-col justify-center gap-[10px] h-[60%]">
         <span class="flex items-center justify-center gap-3 text-lg mb-3 font-medium">
-          <p class="text-[20px] font-[600]">Total =</p>
+          <p class="text-[20px] font-[600]">n =</p>
           <span class="text-[40px] font-[800]"> {{ useDataStore().achieved }}</span>
         </span>
         <span
           v-if="useDataStore().loader"
           class="flex items-center justify-center gap-3 text-lg font-medium"
         >
-          <p class="text-[20px] font-[600]">Achieved =</p>
+          <p class="text-[20px] font-[600]">Percentage =</p>
           <span class="text-[40px] font-[800]"> {{ achieved_percentage }}%</span>
           <!-- <img src="@/assets/images/female.svg" alt="" class="h-10" /> -->
         </span>
@@ -174,7 +181,7 @@ watch(
   <!-- gender -- 2 -->
   <!-- Card Item Start -->
   <div
-    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-[#1c24344d] bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-3"
+    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-[#1c24344d] bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-2"
   >
     <!-- <div
       class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4"
@@ -215,7 +222,7 @@ watch(
   <!-- Customer Type -->
   <!-- Card Item Start -->
   <div
-    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-[#1c24344d] bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-4"
+    class="rounded-lg border shadow-[1px_2px_55px_-18px_#00008070] border-[#1c24344d] bg-white py-6 px-7.5 dark:border-strokedark dark:bg-boxdark xl:col-span-5"
   >
     <!-- <div
       class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4"
@@ -232,7 +239,7 @@ watch(
           <div id="TreeMap" class="mx-auto flex justify-center">
             <VueApexCharts
               type="pie"
-              width="360"
+              width="450"
               :options="chartOptions"
               :series="series"
               ref="chart"
