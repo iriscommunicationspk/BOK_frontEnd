@@ -77,19 +77,95 @@ const data = ref({
     },
     responsive: [
       {
-        breakpoint: 1000,
+        breakpoint: 1024,
         options: {
-          plotOptions: {
-            bar: {
-              horizontal: false
-            }
-          },
-          legend: {
-            position: 'bottom'
+          chart: {
+            width: '900px'
+          }
+        }
+      },
+      {
+        breakpoint: 1466,
+        options: {
+          chart: {
+            width: '700px'
+          }
+        }
+      },
+      {
+        breakpoint: 1315,
+        options: {
+          chart: {
+            width: '600px'
+          }
+        }
+      },
+      {
+        breakpoint: 1280,
+        options: {
+          chart: {
+            width: '800px'
+          }
+        }
+      },
+      {
+        breakpoint: 1089,
+        options: {
+          chart: {
+            width: '700px'
+          }
+        }
+      },
+      // {
+      //   breakpoint: 2160,
+      //   options: {
+      //     chart: {
+      //       width: '1200px'
+      //     }
+      //   }
+      // },
+      {
+        breakpoint: 960,
+        options: {
+          chart: {
+            width: '700px'
+          }
+        }
+      },
+      {
+        breakpoint: 750,
+        options: {
+          chart: {
+            width: '600px'
+          }
+        }
+      },
+      {
+        breakpoint: 655,
+        options: {
+          chart: {
+            width: '500px'
+          }
+        }
+      },
+      {
+        breakpoint: 555,
+        options: {
+          chart: {
+            width: '400px'
+          }
+        }
+      },
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: '100%'
           }
         }
       }
     ],
+
     stroke: {
       width: 1,
       colors: ['#fff']
@@ -131,7 +207,7 @@ watch(
     <div class="mb-3 justify-center gap-4 sm:flex">
       <div>
         <h4 class="text-[22px] text-center font-bold text-black dark:text-white mt-4">
-          Purpose of Visiting Branch - Top 5
+          Purpose of Branch Visit - Top 5
         </h4>
       </div>
     </div>
@@ -146,7 +222,9 @@ watch(
           ref="chart"
         />
       </div>
-      <span class="ml-4 font-bold text-[14px] text-black/40 float-right"> n={{ useDataStore().achieved }} </span>
+      <span class="ml-4 font-bold text-[14px] text-black/40 float-right">
+        n={{ useDataStore().achieved }}
+      </span>
     </div>
   </div>
 </template>

@@ -54,9 +54,9 @@
     @apply !text-body dark:!text-bodydark;
 }
 
-.apexcharts-text {
+/* .apexcharts-text {
     @apply !fill-body dark:!fill-bodydark;
-}
+} */
 
 .apexcharts-xcrosshairs {
     @apply !fill-stroke dark:!fill-strokedark;

@@ -8,7 +8,10 @@ const chart = ref(null)
 
 // Update the chart options
 
-  const series = ref([Math.floor(useDataStore().account_holder), Math.floor(useDataStore().none_account_holder)])
+const series = ref([
+  Math.floor(useDataStore().account_holder),
+  Math.floor(useDataStore().none_account_holder)
+])
 const chartOptions = ref({
   chart: {
     width: 200,
@@ -20,35 +23,25 @@ const chartOptions = ref({
       }
     }
   },
-  labels: ['Account Holders of BAFL', 'None account Holders of BAFL'], // Remove labels by setting this to an empty array
+  labels: ['Account Holders of BAFL', 'Non-account Holders of BAFL'], // Labels for the pie chart
   plotOptions: {
     pie: {
-      showLabels: false // Explicitly hide labels
+      showLabels: true, // Explicitly hide labels
+      dataLabels: {
+        offset: -20
+      }
     }
   },
   dataLabels: {
     enabled: true,
-    formatter: function (val :any, opts:any) {
-      const total = opts.w.globals.seriesTotals.reduce((a:any, b:any) => a + b, 0)
+    formatter: function (val: any, opts: any) {
+      const total = opts.w.globals.seriesTotals.reduce((a: any, b: any) => a + b, 0)
       const percent = (opts.w.globals.series[opts.seriesIndex] / total) * 100
       return Math.floor(percent) + '%'
     },
     style: {
-      colors: ['#FFFFFF', '#FFFFFF'], // Change text color of data labels
-      fontSize: '18px'
-    },
-    dropShadow: {
-      enabled: true,
-      top: 1,
-      left: 1,
-      blur: 2,
-      opacity: 1,
-      color: '#FFFFFF' // Change color of the percentage text shadow
-    }
-  },
-  legend: {
-    labels: {
-      colors: ['#FFFFFF', '#FFFFFF'] // Change text color of legend labels
+      colors: ['#Ffffffff', '#Ffffffff'], // Set the color of the data labels
+      fontSize: '16px'
     }
   },
   responsive: [
@@ -93,9 +86,9 @@ watch(
       class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4"
     ></div> -->
 
-    <div class="mt-4 h-full">
+    <div class="my-5 md:h-full">
       <div>
-        <h4 class="text-[22px] text-center font-bold text-black dark:text-white">
+        <h4 class="text-[22px] mb-5 lg:mb-0 text-center font-bold text-black dark:text-white">
           Total sample size
         </h4>
         <!-- <span class="text-sm font-medium">item.title </span> -->
@@ -156,18 +149,25 @@ watch(
         <!-- <span class="text-sm font-medium">item.title </span> -->
       </div>
 
-      <div v-if="useDataStore().loader" class="flex flex-col justify-center gap-[10px] h-[60%]">
-        <span class="flex items-center justify-center gap-3 text-lg mb-3 font-medium">
-          <p class="text-[20px] font-[600]">n =</p>
-          <span class="text-[40px] font-[800]"> {{ useDataStore().achieved }}</span>
-        </span>
-        <span
-          v-if="useDataStore().loader"
-          class="flex items-center justify-center gap-3 text-lg font-medium"
-        >
-          <p class="text-[20px] font-[600]">Percentage =</p>
-          <span class="text-[40px] font-[800]"> {{ achieved_percentage }}%</span>
-          <!-- <img src="@/assets/images/female.svg" alt="" class="h-10" /> -->
+      <div
+        v-if="useDataStore().loader"
+        class="flex flex-col justify-center gap-[10px] h-[60%] mt-[35px]"
+      >
+        <span class="flex items-center justify-around text-lg mb-3 font-medium">
+          <div class="space-y-8">
+            <p class="text-[20px] font-[600]">n</p>
+            <p class="text-[20px] font-[600]">%</p>
+          </div>
+
+          <div class="space-y-8">
+            <p class="text-[20px] font-[600]">=</p>
+            <p class="text-[20px] font-[600]">=</p>
+          </div>
+
+          <div class="space-y-8">
+            <div class="text-[40px] font-[800]">{{ useDataStore().achieved }}</div>
+            <div class="text-[40px] font-[800]">{{ achieved_percentage }}%</div>
+          </div>
         </span>
       </div>
       <div v-else class="flex justify-start gap-15">
@@ -189,9 +189,7 @@ watch(
 
     <div class="mt-4 h-full">
       <div>
-        <h4 class="text-[22px] text-center font-bold text-black dark:text-white mb-5">
-          Gender Proportion
-        </h4>
+        <h4 class="text-[22px] text-center font-bold text-black dark:text-white mb-8">Gender</h4>
         <!-- <span class="text-sm font-medium">item.title </span> -->
       </div>
 
@@ -201,7 +199,7 @@ watch(
           <span class="text-[30px] font-[800]"> {{ useDataStore().malePercentage }}% </span>
         </span>
 
-        <div class="h-[1px] bg-[#e5e5e5] w-[55%] mx-auto"></div>
+        <div class="h-[1px] bg-[#e5e5e5] w-[80%] mx-auto my-2"></div>
 
         <span
           v-if="useDataStore().loader"
@@ -230,7 +228,9 @@ watch(
 
     <div class="flex flex-col gap-4 justify-center items-center mt-4">
       <div>
-        <h4 class="text-[22px] text-center font-bold text-black dark:text-white">Customer Type</h4>
+        <h4 class="text-[22px] text-center font-bold text-black dark:text-white">
+          BAFL Customer Type
+        </h4>
         <!-- <span class="text-sm font-medium">item.title </span> -->
       </div>
 
@@ -255,3 +255,9 @@ watch(
   </div>
   <!-- Card Item End -->
 </template>
+
+<!-- <style scoped>
+.apexcharts-text {
+  fill: white !important;
+}
+</style> -->

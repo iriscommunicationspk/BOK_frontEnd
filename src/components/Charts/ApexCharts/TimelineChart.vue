@@ -3,6 +3,7 @@ import { useDataStore } from '@/stores/data'
 import { ref, computed, watch } from 'vue'
 // @ts-ignore
 import VueApexCharts, { type VueApexChartsComponent } from 'vue3-apexcharts'
+import dayjs from 'dayjs' // Import dayjs for date manipulation
 
 const dataStore = useDataStore()
 
@@ -27,7 +28,18 @@ interface ChartData {
     colors: string[]
     dataLabels: {
       enabled: boolean
-      formatter: (val: any, opts: any) => string
+      offsetY: number
+      style: {
+        fontSize: string
+        // colors: string[]
+      }
+      background: {
+        enabled: boolean
+        // borderRadius: number
+        // borderWidth: number
+        // opacity: number
+      }
+      formatter: any
     }
     stroke: {
       curve: string
@@ -36,14 +48,17 @@ interface ChartData {
       text?: string
       align?: string
     }
-    grid: {
-      row: {
-        colors: string[]
-        opacity: number
-      }
-    }
+    // grid: {
+    //   row: {
+    //     colors: string[]
+    //     opacity: number
+    //   }
+    // }
     xaxis: {
       categories: string[]
+    }
+    yaxis: {
+      show: boolean
     }
     responsive: {
       breakpoint: number
@@ -71,11 +86,18 @@ const data = ref<ChartData>({
 
     dataLabels: {
       enabled: true,
-      formatter: function (val :any, opts:any) {
-      const total = opts.w.globals.seriesTotals.reduce((a:any, b:any) => a + b, 0)
-      const percent = (opts.w.globals.series[opts.seriesIndex] / total) * 100
-      return  val + '%'
-    },
+      offsetY: -10, // Move labels slightly above the points
+      style: {
+        fontSize: '15px'
+      },
+      background: {
+        enabled: false // Disable the background box
+      },
+      formatter: function (val: any) {
+        if (val === null) return ''
+
+        return val + '%'
+      }
     },
     stroke: {
       curve: 'smooth'
@@ -84,14 +106,18 @@ const data = ref<ChartData>({
       // text: 'Overall Satisfaction Trend',
       // align: 'left'
     },
-    grid: {
-      row: {
-        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on rows
-        opacity: 0.5
-      }
-    },
+    // grid: {
+    //   // row: {
+    //   //   colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on rows
+    //   //   opacity: 0.5
+    //   // }
+    // },
     xaxis: {
       categories: [] // This will be updated with dates
+    },
+
+    yaxis: {
+      show: false
     },
     responsive: [
       {
@@ -146,12 +172,27 @@ const data = ref<ChartData>({
   }
 })
 
+// Preprocess the data_array to include a date before and after
+const preprocessDates = (data: any) => {
+  if (data.length > 0) {
+    const firstDate = dayjs(data[0].date)
+    const lastDate = dayjs(data[data.length - 1].date)
+    return [
+      { date: firstDate.subtract(1, 'day').format('YYYY-M-D'), percentage: null },
+      ...data,
+      { date: lastDate.add(1, 'day').format('YYYY-M-D'), percentage: null }
+    ]
+  }
+  return data
+}
+
 // Watch for changes in data_array and update the chart data accordingly
 watch(
   data_array,
   (newData) => {
-    data.value.series[0].data = newData.map((item) => item.percentage)
-    data.value.chartOptions.xaxis.categories = newData.map((item) => item.date)
+    const processedData = preprocessDates(newData)
+    data.value.series[0].data = processedData.map((item: any) => item.percentage)
+    data.value.chartOptions.xaxis.categories = processedData.map((item: any) => item.date)
 
     // Force update the chart
     if (chart.value) {

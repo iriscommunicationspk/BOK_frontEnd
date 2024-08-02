@@ -43,9 +43,9 @@ const menuGroups = ref([
                   />
                 </svg>`,
         label: 'Dashboard',
-        
-         route: '/' 
-      },
+
+        route: '/'
+      }
       // {
       //   icon: `<svg
       //             class="fill-current"
@@ -184,7 +184,7 @@ const menuGroups = ref([
       //   children: [{ label: 'Settings', route: '/pages/settings' }]
       // }
     ]
-  },
+  }
   // {
   //   name: 'OTHERS',
   //   menuItems: [
@@ -295,7 +295,7 @@ const menuGroups = ref([
 
 <template>
   <aside
-    class="absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0"
+    class="absolute left-0 top-0 z-9999 flex h-screen w-55 flex-col overflow-y-hidden bg-slate-200 duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 shadow-3"
     :class="{
       'translate-x-0': sidebarStore.isSidebarOpen,
       '-translate-x-full': !sidebarStore.isSidebarOpen
@@ -306,10 +306,10 @@ const menuGroups = ref([
     <div class="flex items-center justify-between lg:justify-center gap-2 px-6 py-5.5 lg:py-6.5">
       <router-link to="/">
         <img
-          src="@/assets/images/logo/logo-white.png"
-          class="h-[90px]"
+          src="@/assets/images/logo/logo.png"
+          class="h-[120px] w-[120px]"
           alt="Logo"
-          style="filter: drop-shadow(2px 8px 50px black)"
+          style="filter: drop-shadow(2px 8px 50px white)"
         />
       </router-link>
 
@@ -333,10 +333,10 @@ const menuGroups = ref([
 
     <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
       <!-- Sidebar Menu -->
-      <nav class="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
+      <nav class="mt-5 py-4 lg:mt-9">
         <template v-for="menuGroup in menuGroups" :key="menuGroup.name">
           <div>
-            <h3 class="mb-4 ml-4 text-sm font-medium text-bodydark2">{{ menuGroup.name }}</h3>
+            <h3 class="mb-4 ml-6 text-sm font-bold text-black">{{ menuGroup.name }}</h3>
 
             <ul class="mb-6 flex flex-col gap-1.5">
               <SidebarItem

@@ -18,8 +18,13 @@ onClickOutside(target, () => {
       @click.prevent="dropdownOpen = !dropdownOpen"
     >
       <span class="hidden text-right lg:block mr-7">
-        <span class="block text-sm font-medium text-black dark:text-white">Wasif Zia</span>
-        <span class="block text-xs font-medium">IT Manager</span>
+        <span class="block text-[24px] font-bold text-[#465985] dark:text-white text-start"
+          >iris</span
+        >
+        <span class="block text-sm font-bold text-[#e3656a] dark:text-white -mt-2"
+          >communication</span
+        >
+        <!-- <span class="block text-xs font-medium">IT Manager</span> -->
       </span>
 
       <!-- <span class="h-12 w-12 rounded-full">

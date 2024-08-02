@@ -34,7 +34,7 @@ export const useDataStore = defineStore({
     filteredData: [] as DataItem[], // To store the data after applying filters
     malePercentage: 0,
     femalePercentage: 0,
-    total_sample: 90,
+    total_sample: 60,
     achieved: 0,
     account_holder: 0,
     none_account_holder: 0,
@@ -50,6 +50,9 @@ export const useDataStore = defineStore({
     credit_card: 0,
     filter_applied: false,
     city: 0,
+    branch_Lahore: 0,
+    branch_Karachi: 0,
+    branch_Islamabad: 0,
     staff_interaction_highly: 0,
     staff_interaction_high: 0,
     purpose_of_visit_high: 0,
@@ -85,7 +88,7 @@ export const useDataStore = defineStore({
         this.originalData = [...response.data] // Store original data
         this.filteredData = this.data // Initialize filteredData with all data
         this.getOverallTop2ArrayByDate()
-        // console.log(this.data) // Log the fetched data
+        console.log(this.data) // Log the fetched data
         // console.log(this.staff_interaction_highly)
 
         this.applyFilters()
@@ -168,6 +171,33 @@ export const useDataStore = defineStore({
       const oldCus = this.filteredData.filter((item) => item.existing_customers === '2').length
       this.old_customer = total ? Math.floor((oldCus / total) * 100) : 0
       this.new_customer = total ? Math.floor((newCus / total) * 100) : 0
+      console.log('newCus', newCus, 'oldCus', oldCus, 'total', total)
+
+      // console.log('newCus', newCus, 'oldCus', oldCus)
+
+      const branchLahore = this.filteredData.filter(
+        (item) => item.branch === 'Z Block DHA Phase III, Lahore'
+      ).length
+
+      const branchIslamabad = this.filteredData.filter(
+        (item) => item.branch === 'I-10 Markaz, Islamabad'
+      ).length
+
+      const branchKarachi = this.filteredData.filter(
+        (item) => item.branch === 'Shahrah-e-Faisal, Karachi'
+      ).length
+      this.branch_Lahore = total ? Math.floor((branchLahore / total) * 100) : 0
+      this.branch_Islamabad = total ? Math.floor((branchIslamabad / total) * 100) : 0
+      this.branch_Karachi = total ? Math.floor((branchKarachi / total) * 100) : 0
+
+      console.log(
+        'branchLahore',
+        branchLahore,
+        'branchIslamabad',
+        branchIslamabad,
+        'branchKarachi',
+        branchKarachi
+      )
 
       const withdraw = this.filteredData.filter((item) => item.widrawing_money === 'Yes').length
       this.withdrawal = total ? Math.floor((withdraw / total) * 100) : 0
@@ -320,7 +350,11 @@ export const useDataStore = defineStore({
       this.applyFilters()
     },
     setCustomerType(type: string) {
-      this.filters.customerType = type
+      if (type == 'Account Holder of BAFL') {
+        this.filters.customerType = 'Yes'
+      } else {
+        this.filters.customerType = 'No'
+      }
       this.applyFilters()
     },
     setCity(city: string) {

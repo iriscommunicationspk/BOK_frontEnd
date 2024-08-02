@@ -11,7 +11,13 @@ const data = ref({
   chartOptions: {
     chart: {
       width: 380,
-      type: 'donut'
+      type: 'donut',
+      toolbar: {
+        show: true, // Enable the toolbar
+        tools: {
+          download: true // Allow downloading the chart
+        }
+      }
     },
     plotOptions: {
       pie: {
@@ -22,7 +28,7 @@ const data = ref({
           minAngleToShowLabel: 10
         },
         donut: {
-          size: '60%',
+          size: '67%',
           labels: {
             show: true,
             // name: {
@@ -68,27 +74,20 @@ const data = ref({
     },
     dataLabels: {
       enabled: true,
-      formatter: function (val :any, opts:any) {
-      const total = opts.w.globals.seriesTotals.reduce((a:any, b:any) => a + b, 0)
-      const percent = (opts.w.globals.series[opts.seriesIndex] / total) * 100
-      return Math.floor(percent) + '%'
-    },
-      style: {
-        colors: ['#000', '#fff'], // Text colors for data labels (adjust as needed)
-        fontSize: '15px'
+      formatter: function (val: any, opts: any) {
+        const total = opts.w.globals.seriesTotals.reduce((a: any, b: any) => a + b, 0)
+        const percent = (opts.w.globals.series[opts.seriesIndex] / total) * 100
+        return Math.floor(percent) + '%'
       },
-    //   style: {
-    //   colors: ['#FFFFFF', '#FFFFFF'], // Change text color of data labels
-    //   fontSize: '18px'
-    // },
-    dropShadow: {
-      enabled: true,
-      top: 1,
-      left: 1,
-      blur: 2,
-      opacity: 1,
-      color: '#FFFFFF' // Change color of the percentage text shadow
-    }
+      style: {
+        colors: ['#fff', '#fff'], // Text colors for data labels (adjust as needed)
+        fontSize: '15px'
+      }
+      //   style: {
+      //   colors: ['#FFFFFF', '#FFFFFF'], // Change text color of data labels
+      //   fontSize: '18px'
+      // },
+
       // background: {
       //   enabled: true,
       //   foreColor: '#000', // Color of text inside the background
@@ -104,7 +103,7 @@ const data = ref({
         shade: 'light',
         type: 'horizontal', // 'horizontal', 'vertical', 'diagonal1', 'diagonal2'
         shadeIntensity: 0.5,
-        gradientToColors: [ '#FABB3D'], // Corresponding gradient colors
+        gradientToColors: ['#FABB3D'], // Corresponding gradient colors
         inverseColors: true,
         opacityFrom: 1,
         opacityTo: 1,
@@ -153,12 +152,12 @@ watch(
 
 <template>
   <div
-    class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-4"
+    class="col-span-12 border border-stroke shadow-[1px_2px_55px_-18px_#00008070] bg-white px-5 pt-7.5 pb-5 rounded-lg dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-4"
   >
-    <div class="mb-3 justify-between gap-4 sm:flex">
+    <div class="mb-3 justify-center items-center gap-4 sm:flex">
       <div>
         <h4 class="text-[22px] text-center font-bold text-black dark:text-white mb-10 mt-4">
-          Incidence of New Vs. Old Customers
+          Relationship with BAFL
         </h4>
       </div>
     </div>
@@ -172,7 +171,9 @@ watch(
           ref="chart"
         />
       </div>
-      <span class="ml-4 font-bold text-[14px] text-black/40 float-right"> n={{ useDataStore().achieved }} </span>
+      <span class="ml-4 font-bold text-[14px] text-black/40 float-right">
+        n={{ useDataStore().achieved }}
+      </span>
     </div>
   </div>
 </template>
