@@ -23,7 +23,7 @@ const chartOptions = ref({
       }
     }
   },
-  labels: ['Account Holders of BAFL', 'Non-account Holders of BAFL'], // Labels for the pie chart
+  labels: ['Account Holders of BAFL', 'Non-Account Holders of BAFL'], // Labels for the pie chart
   plotOptions: {
     pie: {
       showLabels: true, // Explicitly hide labels
@@ -89,7 +89,7 @@ watch(
     <div class="my-5 md:h-full">
       <div>
         <h4 class="text-[22px] mb-5 lg:mb-0 text-center font-bold text-black dark:text-white">
-          Total sample size
+          Total Sample Size
         </h4>
         <!-- <span class="text-sm font-medium">item.title </span> -->
       </div>

@@ -172,7 +172,7 @@ watch(
         />
       </div>
       <span class="ml-4 font-bold text-[14px] text-black/40 float-right">
-        n={{ useDataStore().achieved }}
+        n={{ useDataStore().account_holder_count }}
       </span>
     </div>
   </div>

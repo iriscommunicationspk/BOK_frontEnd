@@ -31,15 +31,20 @@ interface ChartData {
       offsetY: number
       style: {
         fontSize: string
-        // colors: string[]
       }
       background: {
         enabled: boolean
-        // borderRadius: number
-        // borderWidth: number
-        // opacity: number
       }
       formatter: any
+    }
+    markers: {
+      size: number
+      colors: string[]
+      strokeColors: string
+      strokeWidth: number
+      hover: {
+        size: number
+      }
     }
     stroke: {
       curve: string
@@ -48,12 +53,6 @@ interface ChartData {
       text?: string
       align?: string
     }
-    // grid: {
-    //   row: {
-    //     colors: string[]
-    //     opacity: number
-    //   }
-    // }
     xaxis: {
       categories: string[]
     }
@@ -83,7 +82,6 @@ const data = ref<ChartData>({
       }
     },
     colors: ['#32a852'], // Change the line color
-
     dataLabels: {
       enabled: true,
       offsetY: -10, // Move labels slightly above the points
@@ -95,8 +93,16 @@ const data = ref<ChartData>({
       },
       formatter: function (val: any) {
         if (val === null) return ''
-
         return val + '%'
+      }
+    },
+    markers: {
+      size: 6,
+      colors: ['#32a852'],
+      strokeColors: '#fff',
+      strokeWidth: 2,
+      hover: {
+        size: 8
       }
     },
     stroke: {
@@ -106,16 +112,9 @@ const data = ref<ChartData>({
       // text: 'Overall Satisfaction Trend',
       // align: 'left'
     },
-    // grid: {
-    //   // row: {
-    //   //   colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on rows
-    //   //   opacity: 0.5
-    //   // }
-    // },
     xaxis: {
       categories: [] // This will be updated with dates
     },
-
     yaxis: {
       show: false
     },

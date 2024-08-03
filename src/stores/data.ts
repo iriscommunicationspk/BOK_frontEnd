@@ -40,6 +40,7 @@ export const useDataStore = defineStore({
     none_account_holder: 0,
     old_customer: 0,
     new_customer: 0,
+    account_holder_count:0,
     branch: 0,
     withdrawal: 0,
     deposit: 0,
@@ -144,7 +145,7 @@ export const useDataStore = defineStore({
 
       this.updateStatistics()
       this.data_array = [...this.getOverallTop2ArrayByDate()]
-      // console.log('data.ts', this.data_array)
+      console.log('data.ts', this.data_array)
     },
     updateStatistics() {
       // console.log('Updating statistics...')
@@ -160,6 +161,7 @@ export const useDataStore = defineStore({
       this.femalePercentage = total ? Math.floor((femaleCount / total) * 100) : 0
 
       const accountHolder = this.filteredData.filter((item) => item.account_holder === 'Yes').length
+      this.account_holder_count = accountHolder
       const noneAccountHolder = this.filteredData.filter(
         (item) => item.account_holder === 'No'
       ).length
@@ -169,9 +171,9 @@ export const useDataStore = defineStore({
       // Update other statistics similarly
       const newCus = this.filteredData.filter((item) => item.existing_customers === '1').length
       const oldCus = this.filteredData.filter((item) => item.existing_customers === '2').length
-      this.old_customer = total ? Math.floor((oldCus / total) * 100) : 0
-      this.new_customer = total ? Math.floor((newCus / total) * 100) : 0
-      console.log('newCus', newCus, 'oldCus', oldCus, 'total', total)
+      this.old_customer = total ? Math.floor((oldCus / this.account_holder_count) * 100) : 0
+      this.new_customer = total ? Math.floor((newCus / this.account_holder_count) * 100) : 0
+      console.log('newCus', newCus, 'oldCus', oldCus, 'total', total , 'account_holder' , accountHolder)
 
       // console.log('newCus', newCus, 'oldCus', oldCus)
 
@@ -316,34 +318,34 @@ export const useDataStore = defineStore({
       //console.log('Top 2 Boxes = ', this.overAll_top2, '%')
     },
     getOverallTop2ArrayByDate() {
-      const overallTop2ByDate: { date: string; percentage: number }[] = []
-
-      const groupedByDate = this.filteredData.reduce(
-        (acc, item) => {
-          const date = item.Date
-          // console.log(date)
-          if (!acc[date]) {
-            acc[date] = { high: 0, highly: 0 }
-          }
-
-          acc[date].high += item.over_all_satisfactory === 'Highly satisfied' ? 1 : 0
-          acc[date].highly += item.over_all_satisfactory === 'Somewhat Satisfied' ? 1 : 0
-
-          return acc
-        },
-        {} as Record<string, { high: number; highly: number }>
-      )
-
+      const overallTop2ByDate = []
+    
+      const groupedByDate = this.filteredData.reduce((acc:any, item:any) => {
+        const date = item.Date
+        if (!acc[date]) {
+          acc[date] = { high: 0, highly: 0 }
+        }
+    
+        acc[date].high += item.over_all_satisfactory === 'Highly satisfied' ? 1 : 0
+        acc[date].highly += item.over_all_satisfactory === 'Somewhat Satisfied' ? 1 : 0
+    
+        return acc
+      }, {})
+    
       for (const [date, counts] of Object.entries(groupedByDate)) {
         overallTop2ByDate.push({
           date: date,
-          percentage: Math.floor(((counts.high + counts.highly) / this.achieved) * 100)
+          percentage: Math.floor(((counts.high + counts.highly) / this.achieved) * 100),
         })
       }
-      this.data_array = [...overallTop2ByDate]
-      // console.log('data.ts', overallTop2ByDate)
-      return overallTop2ByDate
-    },
+    
+      // Sort the array by date
+      this.data_array = [...overallTop2ByDate].sort((a:any, b:any) => new Date(a.date) - new Date(b.date))
+    
+      console.log('data.ts', this.data_array)
+      return this.data_array
+    }
+    ,
 
     setGender(gender: string) {
       this.filters.gender = gender
@@ -395,6 +397,7 @@ export const useDataStore = defineStore({
       this.filters.transferring_fund = ''
       this.filters.loan_service = ''
       this.filters.branch = ''
+      this.filters.withdrawal = ''
       this.filteredData = [...this.originalData]
       this.updateStatistics()
       this.getOverallTop2ArrayByDate()

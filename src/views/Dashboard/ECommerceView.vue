@@ -222,19 +222,19 @@ function filterRemoved() {
         <div class="lg:flex w-full gap-[40px] justify-center">
           <div class="lg:border-r-4 border-[#c3c3c3] lg:w-[25%]">
             <RadialChart1 />
-            <span class="ml-4 font-bold text-[14px] text-black/40">
+            <span class="mr-8 font-bold float-right text-[14px] text-black/40">
               n={{ useDataStore().achieved }}
             </span>
           </div>
           <div class="lg:w-[25%]">
             <RadialChart2 />
-            <span class="ml-4 font-bold text-[14px] text-black/40">
+            <span class="mr-4 font-bold float-right text-[14px] text-black/40">
               n={{ useDataStore().achieved }}
             </span>
           </div>
           <div class="lg:border-l-4 border-[#c3c3c3] lg:w-[25%]">
             <RadialChart3 />
-            <span class="ml-8 font-bold text-[14px] text-black/40">
+            <span class="mr-8 font-bold float-right text-[14px] text-black/40">
               n={{ useDataStore().achieved }}
             </span>
           </div>
