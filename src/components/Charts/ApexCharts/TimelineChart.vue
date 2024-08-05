@@ -7,9 +7,8 @@ import dayjs from 'dayjs' // Import dayjs for date manipulation
 
 const dataStore = useDataStore()
 
-const chart = ref<VueApexChartsComponent | null>(null) // Explicitly type chart.value as VueApexCharts | null
+const chart = ref<VueApexChartsComponent | null>(null)
 
-// Use computed to create a reactive reference to the data_array in the store
 const data_array = computed(() => dataStore.data_array)
 
 interface ChartData {
@@ -45,6 +44,14 @@ interface ChartData {
       hover: {
         size: number
       }
+      discrete: {
+        seriesIndex: number
+        dataPointIndex: number
+        size: number
+        fillColor: string
+        strokeColor: string
+        strokeWidth: number
+      }[]
     }
     stroke: {
       curve: string
@@ -58,6 +65,9 @@ interface ChartData {
     }
     yaxis: {
       show: boolean
+      labels: {
+        formatter: any
+      }
     }
     responsive: {
       breakpoint: number
@@ -70,26 +80,27 @@ const data = ref<ChartData>({
   series: [
     {
       name: 'Overall',
-      data: [] // This will be updated with percentages
+      data: []
     }
   ],
   chartOptions: {
     chart: {
       height: 350,
+    
       type: 'line',
       zoom: {
         enabled: false
       }
     },
-    colors: ['#32a852'], // Change the line color
+    colors: ['#32a852'],
     dataLabels: {
       enabled: true,
-      offsetY: -10, // Move labels slightly above the points
+      offsetY: -10,
       style: {
         fontSize: '15px'
       },
       background: {
-        enabled: false // Disable the background box
+        enabled: false
       },
       formatter: function (val: any) {
         if (val === null) return ''
@@ -103,20 +114,23 @@ const data = ref<ChartData>({
       strokeWidth: 2,
       hover: {
         size: 8
-      }
+      },
+      discrete: []
     },
     stroke: {
       curve: 'smooth'
     },
-    title: {
-      // text: 'Overall Satisfaction Trend',
-      // align: 'left'
-    },
+    title: {},
     xaxis: {
-      categories: [] // This will be updated with dates
+      categories: []
     },
     yaxis: {
-      show: false
+      show: true,
+      labels: {
+        formatter: function () {
+          return ''
+        }
+      }
     },
     responsive: [
       {
@@ -131,12 +145,28 @@ const data = ref<ChartData>({
         breakpoint: 1441,
         options: {
           chart: {
+            width: '600px'
+          }
+        }
+      },
+      {
+        breakpoint: 1315,
+        options: {
+          chart: {
+            width: '600px'
+          }
+        }
+      },
+      {
+        breakpoint: 1280,
+        options: {
+          chart: {
             width: '800px'
           }
         }
       },
       {
-        breakpoint: 1170,
+        breakpoint: 1089,
         options: {
           chart: {
             width: '700px'
@@ -147,15 +177,39 @@ const data = ref<ChartData>({
         breakpoint: 2160,
         options: {
           chart: {
-            width: '1200px'
+            width: '800px'
           }
         }
       },
       {
-        breakpoint: 768,
+        breakpoint: 960,
         options: {
           chart: {
-            width: '1200px'
+            width: '700px'
+          }
+        }
+      },
+      {
+        breakpoint: 750,
+        options: {
+          chart: {
+            width: '600px'
+          }
+        }
+      },
+      {
+        breakpoint: 655,
+        options: {
+          chart: {
+            width: '500px'
+          }
+        }
+      },
+      {
+        breakpoint: 555,
+        options: {
+          chart: {
+            width: '400px'
           }
         }
       },
@@ -167,11 +221,10 @@ const data = ref<ChartData>({
           }
         }
       }
-    ]
+    ],
   }
 })
 
-// Preprocess the data_array to include a date before and after
 const preprocessDates = (data: any) => {
   if (data.length > 0) {
     const firstDate = dayjs(data[0].date)
@@ -185,7 +238,6 @@ const preprocessDates = (data: any) => {
   return data
 }
 
-// Watch for changes in data_array and update the chart data accordingly
 watch(
   data_array,
   (newData) => {
@@ -193,10 +245,19 @@ watch(
     data.value.series[0].data = processedData.map((item: any) => item.percentage)
     data.value.chartOptions.xaxis.categories = processedData.map((item: any) => item.date)
 
-    // Force update the chart
+    // Create discrete markers for each data point
+    data.value.chartOptions.markers.discrete = processedData.map((item: any, index: number) => ({
+      seriesIndex: 0,
+      dataPointIndex: index,
+      size: 6,
+      fillColor: '#32a852',
+      strokeColor: '#fff',
+      strokeWidth: 2
+    }))
+
     if (chart.value) {
-      chart.value.updateSeries(data.value.series)
-      chart.value.updateOptions(data.value.chartOptions)
+      chart.value.updateSeries(data.value.series, true)
+      chart.value.updateOptions(data.value.chartOptions, true)
     }
   },
   { deep: true, immediate: true }
@@ -205,7 +266,7 @@ watch(
 
 <template>
   <div
-    class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-12"
+    class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-7"
   >
     <div class="mb-3 justify-center gap-4 sm:flex">
       <div>

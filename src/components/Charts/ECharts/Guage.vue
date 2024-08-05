@@ -11,6 +11,7 @@ const dataStore = useDataStore()
 const data = ref(dataStore.overAll_top2 / 100)
 const chartInstance = ref(null)
 
+
 const createChart = () => {
   const chartDom = document.getElementById('chart')
   chartInstance.value = echarts.init(chartDom)

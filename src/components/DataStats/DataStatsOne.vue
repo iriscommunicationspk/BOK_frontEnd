@@ -9,8 +9,8 @@ const chart = ref(null)
 // Update the chart options
 
 const series = ref([
-  Math.floor(useDataStore().account_holder),
-  Math.floor(useDataStore().none_account_holder)
+  Math.round(useDataStore().account_holder),
+  Math.round(useDataStore().none_account_holder)
 ])
 const chartOptions = ref({
   chart: {
@@ -37,7 +37,7 @@ const chartOptions = ref({
     formatter: function (val: any, opts: any) {
       const total = opts.w.globals.seriesTotals.reduce((a: any, b: any) => a + b, 0)
       const percent = (opts.w.globals.series[opts.seriesIndex] / total) * 100
-      return Math.floor(percent) + '%'
+      return Math.round(percent) + '%'
     },
     style: {
       colors: ['#Ffffffff', '#Ffffffff'], // Set the color of the data labels
@@ -70,8 +70,8 @@ watch(
     useDataStore().total_sample
   ],
   ([newAccountHolder, newNoneAccountHolder, achieved, total]) => {
-    achieved_percentage.value = Math.floor((achieved / total) * 100)
-    series.value = [Math.floor(newAccountHolder), Math.floor(newNoneAccountHolder)]
+    achieved_percentage.value = Math.round((achieved / total) * 100)
+    series.value = [Math.round(newAccountHolder), Math.round(newNoneAccountHolder)]
     // console.log(newAccountHolder, newNoneAccountHolder)
   }
 )

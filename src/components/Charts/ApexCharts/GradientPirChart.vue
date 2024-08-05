@@ -24,24 +24,13 @@ const data = ref({
         startAngle: -90,
         endAngle: 270,
         dataLabels: {
-          offset: -5,
-          minAngleToShowLabel: 10
+          offset: 1,
+
         },
         donut: {
           size: '67%',
           labels: {
             show: true,
-            // name: {
-            //   show: true,
-            //   fontSize: '1px',
-            //   fontFamily: 'Helvetica, Arial, sans-serif',
-            //   fontWeight: 100,
-            //   color: undefined,
-            //   offsetY: -10,
-            //   formatter: function (val) {
-            //     return val
-            //   }
-            // },
             value: {
               show: true,
               fontSize: '16px',
@@ -77,25 +66,12 @@ const data = ref({
       formatter: function (val: any, opts: any) {
         const total = opts.w.globals.seriesTotals.reduce((a: any, b: any) => a + b, 0)
         const percent = (opts.w.globals.series[opts.seriesIndex] / total) * 100
-        return Math.floor(percent) + '%'
+        return Math.round(percent) + '%'
       },
       style: {
         colors: ['#fff', '#fff'], // Text colors for data labels (adjust as needed)
         fontSize: '15px'
       }
-      //   style: {
-      //   colors: ['#FFFFFF', '#FFFFFF'], // Change text color of data labels
-      //   fontSize: '18px'
-      // },
-
-      // background: {
-      //   enabled: true,
-      //   foreColor: '#000', // Color of text inside the background
-      //   borderRadius: 0,
-      //   dropShadow: {
-      //     enabled: false
-      //   }
-      // }
     },
     fill: {
       type: 'gradient',
@@ -111,7 +87,7 @@ const data = ref({
       }
     },
     colors: ['#FABB3D', 'red'], // Base colors for each series
-    labels: ['New Customers', 'Existing Customers'],
+    labels: ['New to bank customer', 'Existing customers'],
     legend: {
       show: true,
       position: 'bottom',

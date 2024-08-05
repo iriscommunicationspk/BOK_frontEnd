@@ -16,20 +16,20 @@ const data = ref({
           y: useDataStore().deposit
         },
         {
-          x: 'Transfering funds',
-          y: useDataStore().transferring_fund
-        },
-        {
-          x: 'Loan Service',
-          y: useDataStore().loan_service
-        },
-        {
           x: 'Withdrawal',
           y: useDataStore().withdrawal
         },
         {
-          x: 'Closing account',
-          y: useDataStore().closing_acc
+          x: 'Payment Dues',
+          y: useDataStore().payment_dues
+        },
+        {
+          x: 'Cheque Deposit',
+          y: useDataStore().cheque_deposit
+        },
+        {
+          x: 'Transfering Funds',
+          y: useDataStore().transferring_fund
         }
       ]
     }
@@ -184,18 +184,18 @@ const data = ref({
 
 watch(
   () => [
-    useDataStore().withdrawal,
     useDataStore().deposit,
-    useDataStore().loan_service,
-    useDataStore().closing_acc,
+    useDataStore().withdrawal,
+    useDataStore().payment_dues,
+    useDataStore().cheque_deposit,
     useDataStore().transferring_fund
   ],
-  ([withdrawal, deposit, loan_service, closing_acc, transferring_fund]) => {
+  ([deposit,withdrawal, payment_dues,cheque_deposit, transferring_fund]) => {
     data.value.series[0].data[0].y = deposit
-    data.value.series[0].data[1].y = transferring_fund
-    data.value.series[0].data[2].y = loan_service
-    data.value.series[0].data[3].y = withdrawal
-    data.value.series[0].data[4].y = closing_acc
+    data.value.series[0].data[1].y = withdrawal
+    data.value.series[0].data[2].y = payment_dues
+    data.value.series[0].data[3].y = cheque_deposit
+    data.value.series[0].data[4].y = transferring_fund
   }
 )
 </script>

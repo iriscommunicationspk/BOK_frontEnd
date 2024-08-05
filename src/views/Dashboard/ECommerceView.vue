@@ -11,6 +11,7 @@ import Guage from '@/components/Charts/ECharts/Guage.vue'
 import GradientPirChart from '@/components/Charts/ApexCharts/GradientPirChart.vue'
 import CustomDropdown from '@/components/DropDown/DropDown.vue'
 import { ref } from 'vue'
+import VBarChart from '@/components/Charts/ApexCharts/VBarChart.vue'
 
 const dataStore = useDataStore()
 dataStore.fetchData() // Fetch and initialize data
@@ -21,8 +22,12 @@ const gender = ref('Choose a gender')
 const customerType = ref('Choose a customer type')
 const purposeOfVisit = ref('Choose a purpose of visit')
 
+const selectedCity = ref('')
+const selectedBranch = ref('')
+
 function filterByCity(city: string) {
   dataStore.setCity(city === 'Choose a city' ? '' : city)
+  selectedCity.value = city
 }
 
 function filterByGender(gender: string) {
@@ -39,33 +44,44 @@ function setFilter(filter: string, value: string) {
     dataStore.setLoanService('')
     dataStore.setTransferringFund('')
     dataStore.setWithdrawal('')
+    dataStore.setPaymentDues('')
+    dataStore.setChequeDeposit('')
     dataStore.setDeposit('Yes')
-  } else if (value === 'Closing an account') {
+  } else if (value === 'Payments of bills/dues') {
     dataStore.setDeposit('')
     dataStore.setLoanService('')
     dataStore.setTransferringFund('')
     dataStore.setWithdrawal('')
-    dataStore.setClosingAcc('Yes')
+    dataStore.setClosingAcc('')
+    dataStore.setChequeDeposit('')
+    dataStore.setPaymentDues('Yes')
   } else if (value === 'Transferring funds') {
     dataStore.setDeposit('')
     dataStore.setLoanService('')
     dataStore.setClosingAcc('')
     dataStore.setWithdrawal('')
+    dataStore.setPaymentDues('')
+    dataStore.setChequeDeposit('')
     dataStore.setTransferringFund('Yes')
-  } else if (value === 'Loan services/information') {
+  } else if (value === 'Cheque deposit') {
     dataStore.setDeposit('')
     dataStore.setClosingAcc('')
     dataStore.setTransferringFund('')
     dataStore.setWithdrawal('')
-    dataStore.setLoanService('Yes')
+    dataStore.setPaymentDues('')
+    dataStore.setLoanService('')
+    dataStore.setChequeDeposit('Yes')
   } else if (value === 'Withdrawing money') {
     dataStore.setDeposit('')
     dataStore.setClosingAcc('')
     dataStore.setTransferringFund('')
     dataStore.setLoanService('')
+    dataStore.setPaymentDues('')
+    dataStore.setChequeDeposit('')
     dataStore.setWithdrawal('Yes')
   } else if (filter === 'branch') {
     dataStore.setBranch(value)
+    selectedBranch.value = value
   }
 }
 
@@ -75,6 +91,8 @@ function setFilter(filter: string, value: string) {
 
 // Clear filters
 function filterRemoved() {
+  selectedBranch.value = ''
+  selectedCity.value = ''
   dataStore.clearFilters()
   city.value = 'Choose a city'
   branch.value = 'Choose a branch'
@@ -88,7 +106,49 @@ function filterRemoved() {
   <DefaultLayout>
     <div>
       <div class="grid lg:grid-cols-5 md:grid-cols-2 grid-cols-1 justify-between gap-2 flex-wrap">
-        <div>
+        <div v-if="selectedBranch === 'Z Block DHA Phase III, Lahore'">
+          <label
+            for="city-filter"
+            class="block text-base font-bold text-gray-900 dark:text-white ml-2"
+          >
+            City
+          </label>
+          <CustomDropdown
+            :options="['Lahore']"
+            placeholder="Choose a city"
+            v-model="city"
+            @update:modelValue="filterByCity"
+          />
+        </div>
+        <div v-else-if="selectedBranch === 'Shahrah-e-Faisal, Karachi'">
+          <label
+            for="city-filter"
+            class="block text-base font-bold text-gray-900 dark:text-white ml-2"
+          >
+            City
+          </label>
+          <CustomDropdown
+            :options="['Karachi']"
+            placeholder="Choose a city"
+            v-model="city"
+            @update:modelValue="filterByCity"
+          />
+        </div>
+        <div v-else-if="selectedBranch === 'I-10 Markaz, Islamabad'">
+          <label
+            for="city-filter"
+            class="block text-base font-bold text-gray-900 dark:text-white ml-2"
+          >
+            City
+          </label>
+          <CustomDropdown
+            :options="[ 'Islamabad']"
+            placeholder="Choose a city"
+            v-model="city"
+            @update:modelValue="filterByCity"
+          />
+        </div>
+        <div v-else>
           <label
             for="city-filter"
             class="block text-base font-bold text-gray-900 dark:text-white ml-2"
@@ -104,22 +164,66 @@ function filterRemoved() {
         </div>
 
         <div>
-          <label
-            for="branch-filter"
-            class="block text-base font-bold text-gray-900 dark:text-white ml-2"
-          >
-            Branch
-          </label>
-          <CustomDropdown
-            :options="[
-              'Shahrah-e-Faisal, Karachi',
-              'Z Block DHA Phase III, Lahore',
-              'I-10 Markaz, Islamabad'
-            ]"
-            placeholder="Choose a branch"
-            v-model="branch"
-            @update:modelValue="(value) => setFilter('branch', value)"
-          />
+          <div v-if="selectedCity === 'Karachi'">
+            <label
+              for="branch-filter"
+              class="block text-base font-bold text-gray-900 dark:text-white ml-2"
+            >
+              Branch
+            </label>
+            <CustomDropdown
+              :options="['Shahrah-e-Faisal, Karachi']"
+              placeholder="Choose a branch"
+              v-model="branch"
+              @update:modelValue="(value) => setFilter('branch', value)"
+            />
+          </div>
+          <div v-else-if="selectedCity === 'Lahore'">
+            <label
+              for="branch-filter"
+              class="block text-base font-bold text-gray-900 dark:text-white ml-2"
+            >
+              Branch
+            </label>
+            <CustomDropdown
+              :options="['Z Block DHA Phase III, Lahore']"
+              placeholder="Choose a branch"
+              v-model="branch"
+              @update:modelValue="(value) => setFilter('branch', value)"
+            />
+          </div>
+          <div v-else-if="selectedCity === 'Islamabad'">
+            <label
+              for="branch-filter"
+              class="block text-base font-bold text-gray-900 dark:text-white ml-2"
+            >
+              Branch
+            </label>
+            <CustomDropdown
+              :options="['I-10 Markaz, Islamabad']"
+              placeholder="Choose a branch"
+              v-model="branch"
+              @update:modelValue="(value) => setFilter('branch', value)"
+            />
+          </div>
+          <div v-else>
+            <label
+              for="branch-filter"
+              class="block text-base font-bold text-gray-900 dark:text-white ml-2"
+            >
+              Branch
+            </label>
+            <CustomDropdown
+              :options="[
+                'Shahrah-e-Faisal, Karachi',
+                'Z Block DHA Phase III, Lahore',
+                'I-10 Markaz, Islamabad'
+              ]"
+              placeholder="Choose a branch"
+              v-model="branch"
+              @update:modelValue="(value) => setFilter('branch', value)"
+            />
+          </div>
         </div>
 
         <div>
@@ -162,10 +266,10 @@ function filterRemoved() {
           <CustomDropdown
             :options="[
               'Depositing money',
-              'Closing an account',
-              'Transferring funds',
-              'Loan services/information',
-              'Withdrawing money'
+              'Withdrawing money',
+              'Payments of bills/dues',
+              'Cheque deposit',
+              'Transferring funds'
             ]"
             placeholder="Choose a purpose of visit"
             v-model="purposeOfVisit"
@@ -182,9 +286,9 @@ function filterRemoved() {
               dataStore.filters.customerType ||
               dataStore.filters.branch ||
               dataStore.filters.deposit ||
-              dataStore.filters.closing_acc ||
+              dataStore.filters.cheque_deposit ||
               dataStore.filters.transferring_fund ||
-              dataStore.filters.loan_service ||
+              dataStore.filters.payment_dues ||
               dataStore.filters.city ||
               dataStore.filters.withdrawal
             "
@@ -199,9 +303,12 @@ function filterRemoved() {
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-12 2xl:gap-7.5">
         <DataStatsOne />
       </div>
-
+      <div class="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
+        <GradientPirChart />
+        <BarChart />
+      </div>
       <div
-        class="dark:bg-boxdark flex flex-col items-center justify-center p-6 pb-10 mt-8 bg-[#FFFFFF] shadow-[1px_2px_55px_-18px_#00008070] dark:border dark:border-strokedark rounded-lg"
+        class="relative dark:bg-boxdark flex flex-col items-center justify-center p-6 pb-10 mt-8 bg-[#FFFFFF] shadow-[1px_2px_55px_-18px_#00008070] dark:border dark:border-strokedark rounded-lg"
       >
         <div class="-mb-12">
           <h1 class="text-[24px] text-center font-bold text-black dark:text-white mb-2 mt-4">
@@ -214,7 +321,7 @@ function filterRemoved() {
         <Guage />
         <div>
           <span
-            class="ml-4 font-bold text-[14px] text-black/40 dark:text-white absolute top-[57.6rem] right-[35rem]"
+            class="ml-4 font-bold text-[14px] text-black/40 dark:text-white absolute top-[23.5rem] right-[28rem]"
           >
             n={{ useDataStore().achieved }}
           </span>
@@ -240,15 +347,14 @@ function filterRemoved() {
           </div>
         </div>
       </div>
-
       <div class="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <GradientPirChart />
-        <BarChart />
-      </div>
-
-      <div class="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
+        <VBarChart />
         <TimelineChart />
       </div>
+      
+
+      
+     
     </div>
   </DefaultLayout>
 </template>
@@ -257,16 +363,20 @@ function filterRemoved() {
 .bounce-enter-active {
   animation: bounce-in 0.5s;
 }
+
 .bounce-leave-active {
   animation: bounce-in 0.5s reverse;
 }
+
 @keyframes bounce-in {
   0% {
     transform: scale(0);
   }
+
   50% {
     transform: scale(1.25);
   }
+
   100% {
     transform: scale(1);
   }

@@ -10,7 +10,7 @@ function generateDayWiseTimeSeries(baseval: any, count: any, yrange: any) {
   var series = []
   while (i < count) {
     var x = baseval
-    var y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min
+    var y = Math.round(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min
     series.push([x, y])
     baseval += 86400000 // Adding one day in milliseconds
     i++

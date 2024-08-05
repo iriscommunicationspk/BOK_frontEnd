@@ -19,6 +19,9 @@ interface DataItem {
   turn_around_time: string
   over_all_satisfactory: string
   Date: string // Assuming there is a date field
+  payment_dues: string
+  cheque_deposit: string
+  turn_around_time_mins: string
 }
 
 interface DataArrayItem {
@@ -40,7 +43,7 @@ export const useDataStore = defineStore({
     none_account_holder: 0,
     old_customer: 0,
     new_customer: 0,
-    account_holder_count:0,
+    account_holder_count: 0,
     branch: 0,
     withdrawal: 0,
     deposit: 0,
@@ -65,6 +68,16 @@ export const useDataStore = defineStore({
     overAll_high: 0,
     overAll_highly: 0,
     overAll_top2: 0,
+    payment_dues: 0,
+    cheque_deposit: 0,
+    less_then_10: 0,
+    bt_10_15: 0,
+    bt_15_20: 0,
+    bt_20_25: 0,
+    bt_25_30: 0,
+    bt_30_45: 0,
+    bt_45_60: 0,
+    more_then_60: 0,
     filters: {
       gender: '',
       customerType: '',
@@ -75,6 +88,8 @@ export const useDataStore = defineStore({
       loan_service: '',
       branch: '',
       withdrawal: '',
+      payment_dues: '',
+      cheque_deposit: '',
       Date: ''
     },
     satisfaction_trend: [],
@@ -91,7 +106,6 @@ export const useDataStore = defineStore({
         this.getOverallTop2ArrayByDate()
         console.log(this.data) // Log the fetched data
         // console.log(this.staff_interaction_highly)
-
         this.applyFilters()
         this.loader = true
       } catch (error) {
@@ -135,6 +149,14 @@ export const useDataStore = defineStore({
         filtered = filtered.filter((item) => item.widrawing_money === this.filters.withdrawal)
       }
 
+      if (this.filters.payment_dues) {
+        filtered = filtered.filter((item) => item.payment_dues === this.filters.payment_dues)
+      }
+
+      if (this.filters.cheque_deposit) {
+        filtered = filtered.filter((item) => item.cheque_deposit === this.filters.cheque_deposit)
+      }
+
       if (this.filters.branch) {
         // console.log('Filtering by branch:', this.filters.branch)
         filtered = filtered.filter((item) => item.branch === this.filters.branch)
@@ -157,23 +179,32 @@ export const useDataStore = defineStore({
       // Calculate percentages based on filtered data
       const maleCount = this.filteredData.filter((item) => item.gender === 'Male').length
       const femaleCount = this.filteredData.filter((item) => item.gender === 'Female').length
-      this.malePercentage = total ? Math.floor((maleCount / total) * 100) : 0
-      this.femalePercentage = total ? Math.floor((femaleCount / total) * 100) : 0
+      this.malePercentage = total ? Math.round((maleCount / total) * 100) : 0
+      this.femalePercentage = total ? Math.round((femaleCount / total) * 100) : 0
 
       const accountHolder = this.filteredData.filter((item) => item.account_holder === 'Yes').length
       this.account_holder_count = accountHolder
       const noneAccountHolder = this.filteredData.filter(
         (item) => item.account_holder === 'No'
       ).length
-      this.account_holder = total ? Math.floor((accountHolder / total) * 100) : 0
-      this.none_account_holder = total ? Math.floor((noneAccountHolder / total) * 100) : 0
+      this.account_holder = total ? Math.round((accountHolder / total) * 100) : 0
+      this.none_account_holder = total ? Math.round((noneAccountHolder / total) * 100) : 0
 
       // Update other statistics similarly
       const newCus = this.filteredData.filter((item) => item.existing_customers === '1').length
       const oldCus = this.filteredData.filter((item) => item.existing_customers === '2').length
-      this.old_customer = total ? Math.floor((oldCus / this.account_holder_count) * 100) : 0
-      this.new_customer = total ? Math.floor((newCus / this.account_holder_count) * 100) : 0
-      console.log('newCus', newCus, 'oldCus', oldCus, 'total', total , 'account_holder' , accountHolder)
+      this.old_customer = total ? Math.round((oldCus / this.account_holder_count) * 100) : 0
+      this.new_customer = total ? Math.round((newCus / this.account_holder_count) * 100) : 0
+      console.log(
+        'newCus',
+        newCus,
+        'oldCus',
+        oldCus,
+        'total',
+        total,
+        'account_holder',
+        accountHolder
+      )
 
       // console.log('newCus', newCus, 'oldCus', oldCus)
 
@@ -188,9 +219,9 @@ export const useDataStore = defineStore({
       const branchKarachi = this.filteredData.filter(
         (item) => item.branch === 'Shahrah-e-Faisal, Karachi'
       ).length
-      this.branch_Lahore = total ? Math.floor((branchLahore / total) * 100) : 0
-      this.branch_Islamabad = total ? Math.floor((branchIslamabad / total) * 100) : 0
-      this.branch_Karachi = total ? Math.floor((branchKarachi / total) * 100) : 0
+      this.branch_Lahore = total ? Math.round((branchLahore / total) * 100) : 0
+      this.branch_Islamabad = total ? Math.round((branchIslamabad / total) * 100) : 0
+      this.branch_Karachi = total ? Math.round((branchKarachi / total) * 100) : 0
 
       console.log(
         'branchLahore',
@@ -202,31 +233,94 @@ export const useDataStore = defineStore({
       )
 
       const withdraw = this.filteredData.filter((item) => item.widrawing_money === 'Yes').length
-      this.withdrawal = total ? Math.floor((withdraw / total) * 100) : 0
+      this.withdrawal = total ? Math.round((withdraw / total) * 100) : 0
 
       const deposit = this.filteredData.filter((item) => item.deposit === 'Yes').length
-      this.deposit = total ? Math.floor((deposit / total) * 100) : 0
+      this.deposit = total ? Math.round((deposit / total) * 100) : 0
 
       const close = this.filteredData.filter((item) => item.closing_acc === 'Yes').length
-      this.closing_acc = total ? Math.floor((close / total) * 100) : 0
+      this.closing_acc = total ? Math.round((close / total) * 100) : 0
 
       const transfer = this.filteredData.filter((item) => item.transfering_fund === 'Yes').length
-      this.transferring_fund = total ? Math.floor((transfer / total) * 100) : 0
+      this.transferring_fund = total ? Math.round((transfer / total) * 100) : 0
 
       const loan = this.filteredData.filter((item) => item.loan_service === 'Yes').length
-      this.loan_service = total ? Math.floor((loan / total) * 100) : 0
+      this.loan_service = total ? Math.round((loan / total) * 100) : 0
 
       const credit = this.filteredData.filter((item) => item.credit_card === 'Yes').length
-      this.credit_card = total ? Math.floor((credit / total) * 100) : 0
+      this.credit_card = total ? Math.round((credit / total) * 100) : 0
+
+      const paymnet_dues = this.filteredData.filter((item) => item.payment_dues === 'Yes').length
+      this.payment_dues = total ? Math.round((paymnet_dues / total) * 100) : 0
+
+      const cheque_deposite = this.filteredData.filter(
+        (item) => item.cheque_deposit === 'Yes'
+      ).length
+      this.cheque_deposit = total ? Math.round((cheque_deposite / total) * 100) : 0
+
+      const less_then_10 = this.filteredData.filter(
+        (item) => item.turn_around_time_mins === '1'
+      ).length
+
+      this.less_then_10 = total ? Math.round((less_then_10 / total) * 100) : 0
+
+      const bt_10_15 = this.filteredData.filter((item) => item.turn_around_time_mins === '2').length
+
+      this.bt_10_15 = total ? Math.round((bt_10_15 / total) * 100) : 0
+
+      const bt_15_20 = this.filteredData.filter((item) => item.turn_around_time_mins === '3').length
+
+      this.bt_15_20 = total ? Math.round((bt_15_20 / total) * 100) : 0
+
+      const bt_20_25 = this.filteredData.filter((item) => item.turn_around_time_mins === '4').length
+
+      this.bt_20_25 = total ? Math.round((bt_20_25 / total) * 100) : 0
+
+      const bt_25_30 = this.filteredData.filter((item) => item.turn_around_time_mins === '5').length
+
+      this.bt_25_30 = total ? Math.round((bt_25_30 / total) * 100) : 0
+
+      const bt_30_45 = this.filteredData.filter((item) => item.turn_around_time_mins === '6').length
+
+      this.bt_30_45 = total ? Math.round((bt_30_45 / total) * 100) : 0
+
+      const bt_45_60 = this.filteredData.filter((item) => item.turn_around_time_mins === '7').length
+
+      this.bt_45_60 = total ? Math.round((bt_45_60 / total) * 100) : 0
+
+      const more_then_60 = this.filteredData.filter(
+        (item) => item.turn_around_time_mins === '8'
+      ).length
+
+      this.more_then_60 = total ? Math.round((more_then_60 / total) * 100) : 0
+
+      console.log(
+        'less_then_10',
+        this.less_then_10,
+        'bt_10_15',
+        this.bt_10_15,
+        'bt_15_20',
+        this.bt_15_20,
+        'bt_20_25',
+        this.bt_20_25,
+        'bt_25_30',
+        this.bt_25_30,
+        'bt_30_45',
+        this.bt_30_45,
+        'bt_45_60',
+        this.bt_45_60,
+        'more_then_60',
+        this.more_then_60
+      )
 
       // staff_interaction - Top 2 boxes
       const staff_interaction_highly = this.filteredData.filter(
         (item) => item.staff_interaction == 'Highly satisfied'
       ).length
 
-      // console.log('Count = ', staff_interaction_highly)
+      console.log('staff Count highly = ', staff_interaction_highly)
       this.staff_interaction_highly = total
-        ? Math.floor((staff_interaction_highly / total) * 100)
+        ? Math.round((staff_interaction_highly / total) * 100)
         : 0
 
       // console.log('Percentage = ', this.staff_interaction_highly, '%')
@@ -235,8 +329,8 @@ export const useDataStore = defineStore({
         (item) => item.staff_interaction == 'Somewhat Satisfied'
       ).length
 
-      // console.log('Count = ', staff_interaction_high)
-      this.staff_interaction_high = total ? Math.floor((staff_interaction_high / total) * 100) : 0
+      console.log('staff Count high= ', staff_interaction_high)
+      this.staff_interaction_high = total ? Math.round((staff_interaction_high / total) * 100) : 0
 
       // console.log('Percentage = ', this.staff_interaction_high, '%')
 
@@ -245,7 +339,8 @@ export const useDataStore = defineStore({
       //   this.staff_interaction_high + this.staff_interaction_highly,
       //   '%'
       // )
-      this.staff_int_top2 = this.staff_interaction_high + this.staff_interaction_highly
+      const total_staff = staff_interaction_high + staff_interaction_highly
+      this.staff_int_top2 = total ? Math.floor((total_staff / total) * 100) : 0
 
       // purpose_of_visit - Top 2 boxes
 
@@ -253,8 +348,8 @@ export const useDataStore = defineStore({
         (item) => item.purpose_of_visit == 'Highly satisfied'
       ).length
 
-      // console.log('purpose_of_visit_high Count = ', purpose_of_visit_high)
-      this.purpose_of_visit_high = total ? Math.floor((purpose_of_visit_high / total) * 100) : 0
+      console.log('purpose_of_visit_high Count = ', purpose_of_visit_high)
+      this.purpose_of_visit_high = total ? Math.round((purpose_of_visit_high / total) * 100) : 0
 
       // console.log('purpose_of_visit_high Percentage = ', this.purpose_of_visit_high, '%')
 
@@ -262,21 +357,28 @@ export const useDataStore = defineStore({
         (item) => item.purpose_of_visit == 'Somewhat Satisfied'
       ).length
 
-      //console.log('purpose_of_visit_highly Count = ', purpose_of_visit_highly)
-      this.purpose_of_visit_highly = total ? Math.floor((purpose_of_visit_highly / total) * 100) : 0
+      console.log('purpose_of_visit_highly Count = ', purpose_of_visit_highly)
+      this.purpose_of_visit_highly = total ? Math.round((purpose_of_visit_highly / total) * 100) : 0
 
       //console.log('purpose_of_visit_highly Percentage = ', this.purpose_of_visit_highly, '%')
+      console.log('purpose of visit total count =', purpose_of_visit_high + purpose_of_visit_highly)
 
-      this.purpose_of_visit_top2 = this.purpose_of_visit_high + this.purpose_of_visit_highly
+      // this.purpose_of_visit_top2 = this.purpose_of_visit_high + this.purpose_of_visit_highly
 
+      const total_count = purpose_of_visit_high + purpose_of_visit_highly
+      console.log('total count =', total_count)
+
+      this.purpose_of_visit_top2 = Math.round((total_count / total) * 100)
+      console.log('top 2 boxes =', this.purpose_of_visit_top2, '%');
+      
       // turn_around_time - Top 2 boxes
 
       const turn_around_time_high = this.filteredData.filter(
         (item) => item.turn_around_time == 'Highly satisfied'
       ).length
-
-      // console.log('Turn around time Count high = ', turn_around_time_high)
-      this.turn_around_time_high = total ? Math.floor((turn_around_time_high / total) * 100) : 0
+      
+      console.log('Turn around time Count high = ', turn_around_time_high)
+      this.turn_around_time_high = total ? Math.round((turn_around_time_high / total) * 100) : 0
 
       //console.log('Turn around time Percentage high = ', this.turn_around_time_high, '%')
 
@@ -284,12 +386,13 @@ export const useDataStore = defineStore({
         (item) => item.turn_around_time == 'Somewhat Satisfied'
       ).length
 
-      //console.log('Turn around time Count highly = ', turn_around_time_highly)
-      this.turn_around_time_highly = total ? Math.floor((turn_around_time_highly / total) * 100) : 0
+      console.log('Turn around time Count highly = ', turn_around_time_highly)
+      this.turn_around_time_highly = total ? Math.round((turn_around_time_highly / total) * 100) : 0
 
       //console.log('Turn around time Percentage highly = ', this.turn_around_time_highly, '%')
-
-      this.turn_around_time_top2 = this.turn_around_time_high + this.turn_around_time_highly
+      const total_turn = turn_around_time_high + turn_around_time_highly
+      // this.turn_around_time_top2 = this.turn_around_time_high + this.turn_around_time_highly
+      this.turn_around_time_top2 = total ? Math.floor((total_turn / total) * 100):0
 
       ///console.log('Top 2 Boxes = ', this.turn_around_time_top2, '%')
 
@@ -298,54 +401,68 @@ export const useDataStore = defineStore({
       const over_all_high = this.filteredData.filter(
         (item) => item.over_all_satisfactory == 'Highly satisfied'
       ).length
+      console.log('Overall high Count= ', over_all_high)
 
       //console.log('Overall high Count= ', over_all_high)
-      this.overAll_high = total ? Math.floor((over_all_high / total) * 100) : 0
+      this.overAll_high = total ? Math.round((over_all_high / total) * 100) : 0
 
       //console.log('Overall high Percentage= ', this.overAll_high, '%')
 
       const over_all_highly = this.filteredData.filter(
         (item) => item.over_all_satisfactory == 'Somewhat Satisfied'
       ).length
+      console.log('Overall highly Count= ', over_all_highly)
+
+      console.log('guage total count =', over_all_highly + over_all_high)
 
       //console.log('Overall highly Count= ', over_all_highly)
-      this.overAll_highly = total ? Math.floor((over_all_highly / total) * 100) : 0
+      this.overAll_highly = total ? Math.round((over_all_highly / total) * 100) : 0
 
       //console.log('Overall highly Percentage = ', this.overAll_highly, '%')
 
       this.overAll_top2 = this.overAll_high + this.overAll_highly
 
+      console.log('guage = ', this.overAll_top2)
+
       //console.log('Top 2 Boxes = ', this.overAll_top2, '%')
     },
     getOverallTop2ArrayByDate() {
-      const overallTop2ByDate = []
-    
-      const groupedByDate = this.filteredData.reduce((acc:any, item:any) => {
-        const date = item.Date
-        if (!acc[date]) {
-          acc[date] = { high: 0, highly: 0 }
-        }
-    
-        acc[date].high += item.over_all_satisfactory === 'Highly satisfied' ? 1 : 0
-        acc[date].highly += item.over_all_satisfactory === 'Somewhat Satisfied' ? 1 : 0
-    
-        return acc
-      }, {})
-    
+      // Define the type for groupedByDate
+      type GroupedByDate = Record<string, { high: number; highly: number; count: number }>
+
+      const overallTop2ByDate: { date: string; percentage: number }[] = []
+
+      const groupedByDate: GroupedByDate = this.filteredData.reduce(
+        (acc: GroupedByDate, item: any) => {
+          const date = item.Date
+          if (!acc[date]) {
+            acc[date] = { high: 0, highly: 0, count: 0 }
+          }
+          acc[date].count += 1
+          acc[date].high += item.over_all_satisfactory === 'Highly satisfied' ? 1 : 0
+          acc[date].highly += item.over_all_satisfactory === 'Somewhat Satisfied' ? 1 : 0
+
+          return acc
+        },
+        {} as GroupedByDate
+      )
+
       for (const [date, counts] of Object.entries(groupedByDate)) {
         overallTop2ByDate.push({
           date: date,
-          percentage: Math.floor(((counts.high + counts.highly) / this.achieved) * 100),
+          percentage: Math.round(((counts.high + counts.highly) / counts.count) * 100)
         })
       }
-    
+
       // Sort the array by date
-      this.data_array = [...overallTop2ByDate].sort((a:any, b:any) => new Date(a.date) - new Date(b.date))
-    
+      this.data_array = [...overallTop2ByDate].sort(
+        (a: { date: string }, b: { date: string }) =>
+          new Date(a.date).getTime() - new Date(b.date).getTime()
+      )
+
       console.log('data.ts', this.data_array)
       return this.data_array
-    }
-    ,
+    },
 
     setGender(gender: string) {
       this.filters.gender = gender
@@ -383,6 +500,14 @@ export const useDataStore = defineStore({
       this.filters.withdrawal = withdrawal
       this.applyFilters()
     },
+    setPaymentDues(payment_dues: string) {
+      this.filters.payment_dues = payment_dues
+      this.applyFilters()
+    },
+    setChequeDeposit(cheque_deposit: string) {
+      this.filters.cheque_deposit = cheque_deposit
+      this.applyFilters()
+    },
     setBranch(branch: string) {
       console.log('set branch', branch)
       this.filters.branch = branch
@@ -398,6 +523,8 @@ export const useDataStore = defineStore({
       this.filters.loan_service = ''
       this.filters.branch = ''
       this.filters.withdrawal = ''
+      this.filters.payment_dues = ''
+      this.filters.cheque_deposit = ''
       this.filteredData = [...this.originalData]
       this.updateStatistics()
       this.getOverallTop2ArrayByDate()
