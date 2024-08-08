@@ -3,7 +3,7 @@ import { useDataStore } from '@/stores/data'
 import { ref, watch } from 'vue'
 // @ts-ignore
 import VueApexCharts from 'vue3-apexcharts'
-
+import { PulseLoader } from 'vue-spinner/dist/vue-spinner.min.js'
 const chart = ref(null)
 
 const data = ref({
@@ -24,8 +24,7 @@ const data = ref({
         startAngle: -90,
         endAngle: 270,
         dataLabels: {
-          offset: 1,
-
+          offset: 1
         },
         donut: {
           size: '67%',
@@ -128,17 +127,18 @@ watch(
 
 <template>
   <div
-    class="col-span-12 border border-stroke shadow-[1px_2px_55px_-18px_#00008070] bg-white px-5 pt-7.5 pb-5 rounded-lg dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-4"
+    class="relative col-span-12 border min-h-[400px] border-stroke shadow-[1px_2px_55px_-18px_#00008070] bg-white px-5 pt-7.5 pb-5 rounded-lg dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-4"
   >
     <div class="mb-3 justify-center items-center gap-4 sm:flex">
       <div>
-        <h4 class="text-[22px] text-center font-bold text-black dark:text-white mb-10 mt-4">
+        <h4 class="text-[19px] text-center font-extrabold text-black dark:text-white mb-10 mt-4">
           Relationship with BAFL
         </h4>
       </div>
     </div>
-    <div class="mb-2">
-      <div id="TreeMap" class="mx-auto flex justify-center">
+
+    <div class="mb-2" v-if="useDataStore().new_customer > 0 && useDataStore().old_customer > 0">
+      <div id="TreeMap" class="mx-auto flex justify-center item-center">
         <VueApexCharts
           type="donut"
           width="380"
@@ -150,6 +150,16 @@ watch(
       <span class="ml-4 font-bold text-[14px] text-black/40 float-right">
         n={{ useDataStore().account_holder_count }}
       </span>
+    </div>
+
+    <div
+      v-else
+      class="absolute left-[34%] top-[50%] text-[42px] text-center font-extrabold text-black dark:text-white mb-8"
+    >
+      <div v-if="!useDataStore().loader" class="ml-10 mt-5">
+        <pulse-loader :color="useDataStore().color" :size="useDataStore().size"></pulse-loader>
+      </div>
+      <div v-else class="mt-5 ml-10 text-xl">No Data</div>
     </div>
   </div>
 </template>

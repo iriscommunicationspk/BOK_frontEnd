@@ -81,6 +81,7 @@ onUnmounted(() => {
   font-size: 16px;
   transition: border-color 0.2s ease-in-out;
   margin-top: 5px;
+  text-wrap: none;
 }
 
 .dropdown-button:hover {

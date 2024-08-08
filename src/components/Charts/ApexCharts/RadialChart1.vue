@@ -3,6 +3,7 @@ import { ref, watchEffect, computed } from 'vue'
 // @ts-ignore
 import VueApexCharts from 'vue3-apexcharts'
 import { useDataStore } from '@/stores/data'
+import { PulseLoader } from 'vue-spinner/dist/vue-spinner.min.js'
 
 const chart = ref(null)
 const dataStore = useDataStore()
@@ -61,26 +62,41 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div class="justify-center gap-4 sm:flex">
-    <div class="">
-      <h2 class="text-[20px] font-bold text-black dark:text-white text-center">
-        Satisfaction Score
-      </h2>
-      <h4 class="text-[18px] font-semibold text-black dark:text-white text-center">
-        Fulfillment of purpose of visit
-      </h4>
+  <div class="relative">
+    <div class="justify-center gap-4 sm:flex">
+      <div class="">
+        <h2 class="text-[20px] font-bold text-black dark:text-white text-center">
+          Satisfaction Score
+        </h2>
+        <h4 class="text-[18px] font-semibold text-black dark:text-white text-center">
+          Fulfillment of purpose of visit
+        </h4>
+      </div>
     </div>
-  </div>
-  <div class="flex mb-2 mt-[20px]">
-    <div id="TreeMap" class="mx-auto flex justify-center">
-      <VueApexCharts
-        type="radialBar"
-        height="250"
-        width="250"
-        :options="data1.chartOptions"
-        :series="data1.series"
-        ref="chart"
-      />
+    <div class="mb-2 mt-[20px]" v-if="useDataStore().purpose_of_visit_top2 > 0">
+      <div id="TreeMap" class="flex justify-center">
+        <VueApexCharts
+          type="radialBar"
+          height="350"
+          width="350"
+          :options="data1.chartOptions"
+          :series="data1.series"
+          ref="chart"
+        />
+      </div>
+      <span class="mr-8 font-bold float-right text-[14px] text-black/40">
+        n={{ useDataStore().achieved }}
+      </span>
+    </div>
+
+    <div
+      v-else
+      class="absolute left-[15%] top-[150%] text-center font-extrabold text-black dark:text-white mb-8"
+    >
+      <div v-if="!useDataStore().loader" class="ml-20 mt-5">
+        <pulse-loader :color="useDataStore().color" :size="useDataStore().size"></pulse-loader>
+      </div>
+      <div v-else class="mt-5 ml-20 text-xl">No Data</div>
     </div>
   </div>
 </template>

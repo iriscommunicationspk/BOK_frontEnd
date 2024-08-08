@@ -142,7 +142,7 @@ function filterRemoved() {
             City
           </label>
           <CustomDropdown
-            :options="[ 'Islamabad']"
+            :options="['Islamabad']"
             placeholder="Choose a city"
             v-model="city"
             @update:modelValue="filterByCity"
@@ -308,13 +308,13 @@ function filterRemoved() {
         <BarChart />
       </div>
       <div
-        class="relative dark:bg-boxdark flex flex-col items-center justify-center p-6 pb-10 mt-8 bg-[#FFFFFF] shadow-[1px_2px_55px_-18px_#00008070] dark:border dark:border-strokedark rounded-lg"
+        class="relative dark:bg-boxdark flex flex-col items-center justify-center p-6 pb-10 mt-8 bg-[#FFFFFF] shadow-[1px_2px_55px_-18px_#00008070] dark:border dark:border-strokedark rounded-lg min-h-[45rem]"
       >
         <div class="-mb-12">
-          <h1 class="text-[24px] text-center font-bold text-black dark:text-white mb-2 mt-4">
+          <h1 class="text-[22px] text-center font-extrabold text-black dark:text-white mb-2 mt-4">
             Satisfaction Score with Overall Experience
           </h1>
-          <h2 class="text-[22px] text-center font-bold text-black dark:text-white">
+          <h2 class="text-[20px] text-center font-extrabold text-black dark:text-white">
             (Top 2 Boxes Score)
           </h2>
         </div>
@@ -326,24 +326,15 @@ function filterRemoved() {
             n={{ useDataStore().achieved }}
           </span>
         </div>
-        <div class="lg:flex w-full gap-[40px] justify-center">
-          <div class="lg:border-r-4 border-[#c3c3c3] lg:w-[25%]">
+        <div class="flex flex-col lg:flex-row w-full justify-around items-center gap-10 lg:gap-0">
+          <div class="border-[#c3c3c3] lg:w-[25%]">
             <RadialChart1 />
-            <span class="mr-8 font-bold float-right text-[14px] text-black/40">
-              n={{ useDataStore().achieved }}
-            </span>
           </div>
-          <div class="lg:w-[25%]">
+          <div class="w-[30%]">
             <RadialChart2 />
-            <span class="mr-4 font-bold float-right text-[14px] text-black/40">
-              n={{ useDataStore().achieved }}
-            </span>
           </div>
-          <div class="lg:border-l-4 border-[#c3c3c3] lg:w-[25%]">
+          <div class="border-[#c3c3c3] lg:w-[25%]">
             <RadialChart3 />
-            <span class="mr-8 font-bold float-right text-[14px] text-black/40">
-              n={{ useDataStore().achieved }}
-            </span>
           </div>
         </div>
       </div>
@@ -351,10 +342,6 @@ function filterRemoved() {
         <VBarChart />
         <TimelineChart />
       </div>
-      
-
-      
-     
     </div>
   </DefaultLayout>
 </template>

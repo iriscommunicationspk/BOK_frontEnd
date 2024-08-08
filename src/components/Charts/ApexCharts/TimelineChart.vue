@@ -3,6 +3,8 @@ import { useDataStore } from '@/stores/data'
 import { ref, computed, watch } from 'vue'
 // @ts-ignore
 import VueApexCharts, { type VueApexChartsComponent } from 'vue3-apexcharts'
+import { PulseLoader } from 'vue-spinner/dist/vue-spinner.min.js'
+
 import dayjs from 'dayjs' // Import dayjs for date manipulation
 
 const dataStore = useDataStore()
@@ -69,6 +71,10 @@ interface ChartData {
         formatter: any
       }
     }
+    fill: {
+      type: string
+      gradient: any
+    }
     responsive: {
       breakpoint: number
       options: Record<string, any>
@@ -86,7 +92,7 @@ const data = ref<ChartData>({
   chartOptions: {
     chart: {
       height: 350,
-    
+
       type: 'line',
       zoom: {
         enabled: false
@@ -132,7 +138,27 @@ const data = ref<ChartData>({
         }
       }
     },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shade: 'dark',
+        gradientToColors: ['#FDD835'],
+        shadeIntensity: 1,
+        type: 'horizontal',
+        opacityFrom: 1,
+        opacityTo: 1,
+        stops: [0, 100, 0]
+      }
+    },
     responsive: [
+    {
+        breakpoint: 1640,
+        options: {
+          chart: {
+            width: '700px'
+          }
+        }
+      },
       {
         breakpoint: 1024,
         options: {
@@ -177,7 +203,7 @@ const data = ref<ChartData>({
         breakpoint: 2160,
         options: {
           chart: {
-            width: '800px'
+            width: '760px'
           }
         }
       },
@@ -221,7 +247,7 @@ const data = ref<ChartData>({
           }
         }
       }
-    ],
+    ]
   }
 })
 
@@ -266,19 +292,19 @@ watch(
 
 <template>
   <div
-    class="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-7"
+    class="relative min-h-[500px] col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-7"
   >
     <div class="mb-3 justify-center gap-4 sm:flex">
       <div>
-        <h4 class="text-[24px] text-center font-bold text-black dark:text-white mb-2 mt-4">
+        <h4 class="text-[22px] text-center font-extrabold text-black dark:text-white mb-2 mt-4">
           Overall Satisfaction Trend
         </h4>
-        <h1 class="text-[22px] text-center font-bold text-black dark:text-white">
+        <h1 class="text-[20px] text-center font-extrabold text-black dark:text-white">
           (Top 2 Boxes Score)
         </h1>
       </div>
     </div>
-    <div class="mb-2">
+    <div class="mb-2" v-if="data_array.length > 0">
       <div id="TreeMap" class="mx-auto flex justify-center w-full">
         <VueApexCharts
           type="line"
@@ -288,6 +314,15 @@ watch(
           ref="chart"
         />
       </div>
+    </div>
+    <div
+      v-else
+      class="absolute left-[38%] top-[50%] text-center font-extrabold text-black dark:text-white mb-8"
+    >
+      <div v-if="!useDataStore().loader" class="ml-20 mt-5">
+        <pulse-loader :color="useDataStore().color" :size="useDataStore().size"></pulse-loader>
+      </div>
+      <div v-else class="mt-5 ml-16 text-xl">No Data</div>
     </div>
   </div>
 </template>

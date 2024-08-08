@@ -3,6 +3,8 @@ import { useDataStore } from '@/stores/data'
 import { ref, watch } from 'vue'
 // @ts-ignore
 import VueApexCharts, { type VueApexChartsComponent } from 'vue3-apexcharts'
+import { PulseLoader } from 'vue-spinner/dist/vue-spinner.min.js'
+
 
 const dataStore = useDataStore()
 
@@ -56,7 +58,7 @@ const chartOptions = ref({
       colors: ['#000']
     },
     formatter: function (val: number) {
-      return val.toString() + '%';
+      return val > 0 ? val.toString() + '%' : ''
     }
   },
   xaxis: {
@@ -70,69 +72,116 @@ const chartOptions = ref({
       '46 – 60 minutes',
       'More than 60 minutes'
     ],
-    show:false,
+    show: false,
     labels: {
-        formatter: function () {
-          return ''
-        }
+      formatter: function () {
+        return ''
       }
+    }
   },
   yaxis: {
     title: {
       text: ''
     }
-
   },
   responsive: [
-      {
-        breakpoint: 1024,
-        options: {
-          chart: {
-            width: '900px'
-          }
-        }
-      },
-      {
-        breakpoint: 1441,
-        options: {
-          chart: {
-            width: '400px'
-          }
-        }
-      },
-      {
-        breakpoint: 1170,
-        options: {
-          chart: {
-            width: '700px'
-          }
-        }
-      },
-      {
-        breakpoint: 2160,
-        options: {
-          chart: {
-            width: '520px'
-          }
-        }
-      },
-      {
-        breakpoint: 769,
-        options: {
-          chart: {
-            width: '650px'
-          }
-        }
-      },
-      {
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: '100%'
-          }
+  {
+      breakpoint: 980,
+      options: {
+        chart: {
+          width: '700px'
         }
       }
-    ]
+    },
+    {
+      breakpoint: 700,
+      options: {
+        chart: {
+          width: '600px'
+        }
+      }
+    },
+    {
+      breakpoint: 640,
+      options: {
+        chart: {
+          width: '500px'
+        }
+      }
+    },
+    {
+      breakpoint: 540,
+      options: {
+        chart: {
+          width: '400px'
+        }
+      }
+    },
+  {
+      breakpoint: 1280,
+      options: {
+        chart: {
+          width: '900px'
+        }
+      }
+    },
+    {
+      breakpoint: 1024,
+      options: {
+        chart: {
+          width: '900px'
+        }
+      }
+    },
+    {
+      breakpoint: 1441,
+      options: {
+        chart: {
+          width: '400px'
+        }
+      }
+    },
+    {
+      breakpoint: 1530,
+      options: {
+        chart: {
+          width: '450px'
+        }
+      }
+    },
+    {
+      breakpoint: 1170,
+      options: {
+        chart: {
+          width: '700px'
+        }
+      }
+    },
+    {
+      breakpoint: 2160,
+      options: {
+        chart: {
+          width: '520px'
+        }
+      }
+    },
+    {
+      breakpoint: 769,
+      options: {
+        chart: {
+          width: '650px'
+        }
+      }
+    },
+    {
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: '100%'
+        }
+      }
+    }
+  ]
 })
 
 watch(
@@ -157,21 +206,21 @@ watch(
 
 <template>
   <div
-    class="col-span-12 rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-[1px_2px_55px_-18px_#00008070] dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-5"
+    class="relative col-span-12 rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-[1px_2px_55px_-18px_#00008070] dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-5"
   >
     <div class="mb-3 justify-center gap-4 sm:flex">
       <div>
-        <h4 class="text-[22px] text-center font-bold text-black dark:text-white mt-4">
-          Turnaround Time of Today's Purpose of Visit
+        <h4 class="text-[19.5px] text-center font-extrabold text-black dark:text-white mt-4">
+          Turnaround Time of Purpose of Visit
         </h4>
       </div>
     </div>
-    <div class="mb-2">
+
+    <div class="mb-2" v-if="dataStore.bt_10_15 > 0 || dataStore.bt_15_20 > 0 || dataStore.bt_20_25 > 0 || dataStore.bt_25_30 > 0 || dataStore.bt_30_45 > 0 || dataStore.bt_45_60 > 0 || dataStore.more_then_60 > 0">
       <div id="TreeMap" class="mx-auto flex justify-center mt-5">
         <VueApexCharts
           type="bar"
           height="400"
-        
           :options="chartOptions"
           :series="chartSeries"
           ref="chart"
@@ -180,6 +229,15 @@ watch(
       <span class="ml-4 font-bold text-[14px] text-black/40 float-right">
         n={{ useDataStore().achieved }}
       </span>
+    </div>
+    <div
+      v-else
+      class="absolute left-[32%] top-[50%] text-center font-extrabold text-black dark:text-white mb-8"
+    >
+      <div v-if="!useDataStore().loader" class="ml-20 mt-5">
+        <pulse-loader :color="useDataStore().color" :size="useDataStore().size"></pulse-loader>
+      </div>
+      <div v-else class="mt-5 ml-26 text-xl">No Data</div>
     </div>
   </div>
 </template>

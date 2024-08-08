@@ -3,35 +3,15 @@ import { useDataStore } from '@/stores/data'
 import { ref, watch } from 'vue'
 // @ts-ignore
 import VueApexCharts from 'vue3-apexcharts'
+import { PulseLoader } from 'vue-spinner/dist/vue-spinner.min.js'
 
 const chart = ref(null)
 
 const data = ref({
   series: [
     {
-      name: 'Actual',
-      data: [
-        {
-          x: 'Depositing Money',
-          y: useDataStore().deposit
-        },
-        {
-          x: 'Withdrawal',
-          y: useDataStore().withdrawal
-        },
-        {
-          x: 'Payment Dues',
-          y: useDataStore().payment_dues
-        },
-        {
-          x: 'Cheque Deposit',
-          y: useDataStore().cheque_deposit
-        },
-        {
-          x: 'Transfering Funds',
-          y: useDataStore().transferring_fund
-        }
-      ]
+      name: 'Actuadl',
+      data: useDataStore().top5Array
     }
   ],
   chartOptions: {
@@ -183,35 +163,25 @@ const data = ref({
 })
 
 watch(
-  () => [
-    useDataStore().deposit,
-    useDataStore().withdrawal,
-    useDataStore().payment_dues,
-    useDataStore().cheque_deposit,
-    useDataStore().transferring_fund
-  ],
-  ([deposit,withdrawal, payment_dues,cheque_deposit, transferring_fund]) => {
-    data.value.series[0].data[0].y = deposit
-    data.value.series[0].data[1].y = withdrawal
-    data.value.series[0].data[2].y = payment_dues
-    data.value.series[0].data[3].y = cheque_deposit
-    data.value.series[0].data[4].y = transferring_fund
+  () => [useDataStore().top5Array],
+  ([top5Array]) => {
+    data.value.series[0].data = top5Array
   }
 )
 </script>
 
 <template>
   <div
-    class="col-span-12 rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-[1px_2px_55px_-18px_#00008070] dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8"
+    class="relative col-span-12 rounded-lg border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-[1px_2px_55px_-18px_#00008070] dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8"
   >
     <div class="mb-3 justify-center gap-4 sm:flex">
       <div>
-        <h4 class="text-[22px] text-center font-bold text-black dark:text-white mt-4">
+        <h4 class="text-[19px] text-center font-extrabold text-black dark:text-white mt-4">
           Purpose of Branch Visit - Top 5
         </h4>
       </div>
     </div>
-    <div class="mb-2">
+    <div class="mb-2" v-if="useDataStore().top5Array.length > 0">
       <div id="TreeMap" class="mx-auto flex justify-center">
         <VueApexCharts
           type="bar"
@@ -225,6 +195,15 @@ watch(
       <span class="ml-4 font-bold text-[14px] text-black/40 float-right">
         n={{ useDataStore().achieved }}
       </span>
+    </div>
+    <div
+      v-else
+      class="absolute left-[34%] top-[50%] text-center font-extrabold text-black dark:text-white mb-8"
+    >
+      <div v-if="!useDataStore().loader" class="ml-20 mt-5">
+        <pulse-loader :color="useDataStore().color" :size="useDataStore().size"></pulse-loader>
+      </div>
+      <div v-else class="mt-5 ml-20 text-xl">No Data</div>
     </div>
   </div>
 </template>

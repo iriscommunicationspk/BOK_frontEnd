@@ -12,6 +12,23 @@ interface DataItem {
   transfering_fund: string
   loan_service: string
   credit_card: string
+  Complain_resolution: string
+  Foreign_echange: string
+  Investment_service: string
+  financial_advice: string
+  customer_support: string
+  digital_banking: string
+  money_pay_order: string
+  safe_deposit: string
+  payments_bills: string
+  issuance_cheque_book: string
+  bank_statement: string
+  online_transaction: string
+  installment_plot: string
+  receive_ATM: string
+  Update_personal_info: string
+  credit_card_payment: string
+  opening_new_acc: string
   city: string
   branch: string
   staff_interaction: string
@@ -29,9 +46,16 @@ interface DataArrayItem {
   percentage: number
 }
 
+interface TopCategoryItem {
+  x: string
+  y: number
+}
+
 export const useDataStore = defineStore({
   id: 'data',
   state: () => ({
+    color: '#455984',
+    size: '15px',
     data: [] as DataItem[],
     originalData: [] as DataItem[], // Store the unfiltered data
     filteredData: [] as DataItem[], // To store the data after applying filters
@@ -70,6 +94,25 @@ export const useDataStore = defineStore({
     overAll_top2: 0,
     payment_dues: 0,
     cheque_deposit: 0,
+    Complain_resolution: 0,
+    Foreign_echange: 0,
+    Investment_service: 0,
+    financial_advice: 0,
+    customer_support: 0,
+    digital_banking: 0,
+    money_pay_order: 0,
+    safe_deposit: 0,
+
+    issuance_cheque_book: 0,
+    bank_statement: 0,
+    online_transaction: 0,
+    installment_plot: 0,
+    receive_ATM: 0,
+    credit_card_payment: 0,
+
+    opening_new_acc: 0,
+    Update_personal_info: 0,
+
     less_then_10: 0,
     bt_10_15: 0,
     bt_15_20: 0,
@@ -78,6 +121,7 @@ export const useDataStore = defineStore({
     bt_30_45: 0,
     bt_45_60: 0,
     more_then_60: 0,
+    top5Array: [] as TopCategoryItem[],
     filters: {
       gender: '',
       customerType: '',
@@ -168,6 +212,7 @@ export const useDataStore = defineStore({
       this.updateStatistics()
       this.data_array = [...this.getOverallTop2ArrayByDate()]
       console.log('data.ts', this.data_array)
+      this.updateTop5Array()
     },
     updateStatistics() {
       // console.log('Updating statistics...')
@@ -258,6 +303,120 @@ export const useDataStore = defineStore({
       ).length
       this.cheque_deposit = total ? Math.round((cheque_deposite / total) * 100) : 0
 
+      const Complain_resolutions = this.filteredData.filter(
+        (item) => item.Complain_resolution === 'Yes'
+      ).length
+
+      this.Complain_resolution = total ? Math.round((Complain_resolutions / total) * 100) : 0
+
+      const Foreign_echanges = this.filteredData.filter(
+        (item) => item.Foreign_echange === 'Yes'
+      ).length
+
+      this.Foreign_echange = total ? Math.round((Foreign_echanges / total) * 100) : 0
+
+      const Investment_services = this.filteredData.filter(
+        (item) => item.Investment_service === 'Yes'
+      ).length
+
+      this.Investment_service = total ? Math.round((Investment_services / total) * 100) : 0
+
+      // financial_advice
+
+      const financial_advice = this.filteredData.filter(
+        (item) => item.financial_advice === 'Yes'
+      ).length
+      this.financial_advice = total ? Math.round((financial_advice / total) * 100) : 0
+
+      // customer_support
+
+      const customer_support = this.filteredData.filter(
+        (item) => item.customer_support === 'Yes'
+      ).length
+      this.customer_support = total ? Math.round((customer_support / total) * 100) : 0
+
+      // digital_banking
+
+      const digital_banking = this.filteredData.filter(
+        (item) => item.digital_banking === 'Yes'
+      ).length
+      this.digital_banking = total ? Math.round((digital_banking / total) * 100) : 0
+
+      // money_pay_order
+
+      const money_pay_order = this.filteredData.filter(
+        (item) => item.money_pay_order === 'Yes'
+      ).length
+      this.money_pay_order = total ? Math.round((money_pay_order / total) * 100) : 0
+
+      // safe_deposit
+
+      const safe_deposit = this.filteredData.filter((item) => item.safe_deposit === 'Yes').length
+      this.safe_deposit = total ? Math.round((safe_deposit / total) * 100) : 0
+
+      // // payments_bills
+
+      // const payments_bills = this.filteredData.filter(
+      //   (item) => item.payments_bills === 'Yes'
+      // ).length
+      // this.payments_bills = total ? Math.round((payments_bills / total) * 100) : 0
+
+      // issuance_cheque_book
+
+      const issuance_cheque_book = this.filteredData.filter(
+        (item) => item.issuance_cheque_book === 'Yes'
+      ).length
+      this.issuance_cheque_book = total ? Math.round((issuance_cheque_book / total) * 100) : 0
+
+      // bank_statement
+
+      const bank_statement = this.filteredData.filter(
+        (item) => item.bank_statement === 'Yes'
+      ).length
+      this.bank_statement = total ? Math.round((bank_statement / total) * 100) : 0
+
+      // online_transaction
+
+      const online_transaction = this.filteredData.filter(
+        (item) => item.online_transaction === 'Yes'
+      ).length
+      this.online_transaction = total ? Math.round((online_transaction / total) * 100) : 0
+
+      // installment_plot
+
+      const installment_plot = this.filteredData.filter(
+        (item) => item.installment_plot === 'Yes'
+      ).length
+      this.installment_plot = total ? Math.round((installment_plot / total) * 100) : 0
+
+      // receive_ATM
+
+      const receive_ATM = this.filteredData.filter((item) => item.receive_ATM === 'Yes').length
+      this.receive_ATM = total ? Math.round((receive_ATM / total) * 100) : 0
+
+      // credit_card_payment
+
+      const credit_card_payment = this.filteredData.filter(
+        (item) => item.credit_card_payment === 'Yes'
+      ).length
+      this.credit_card_payment = total ? Math.round((credit_card_payment / total) * 100) : 0
+
+      // opening_new_acc
+
+      const opening_new_acc = this.filteredData.filter(
+        (item) => item.opening_new_acc === 'Yes'
+      ).length
+
+      this.opening_new_acc = total ? Math.round((opening_new_acc / total) * 100) : 0
+
+      // Update_personal_info
+
+      const Update_personal_info = this.filteredData.filter(
+        (item) => item.Update_personal_info === 'Yes'
+      ).length
+      this.Update_personal_info = total ? Math.round((Update_personal_info / total) * 100) : 0
+
+      //////////////////////////////////////////////////////////////////////////////////////////////
       const less_then_10 = this.filteredData.filter(
         (item) => item.turn_around_time_mins === '1'
       ).length
@@ -340,7 +499,7 @@ export const useDataStore = defineStore({
       //   '%'
       // )
       const total_staff = staff_interaction_high + staff_interaction_highly
-      this.staff_int_top2 = total ? Math.floor((total_staff / total) * 100) : 0
+      this.staff_int_top2 = total ? Math.round((total_staff / total) * 100) : 0
 
       // purpose_of_visit - Top 2 boxes
 
@@ -369,14 +528,14 @@ export const useDataStore = defineStore({
       console.log('total count =', total_count)
 
       this.purpose_of_visit_top2 = Math.round((total_count / total) * 100)
-      console.log('top 2 boxes =', this.purpose_of_visit_top2, '%');
-      
+      console.log('top 2 boxes =', this.purpose_of_visit_top2, '%')
+
       // turn_around_time - Top 2 boxes
 
       const turn_around_time_high = this.filteredData.filter(
         (item) => item.turn_around_time == 'Highly satisfied'
       ).length
-      
+
       console.log('Turn around time Count high = ', turn_around_time_high)
       this.turn_around_time_high = total ? Math.round((turn_around_time_high / total) * 100) : 0
 
@@ -392,7 +551,7 @@ export const useDataStore = defineStore({
       //console.log('Turn around time Percentage highly = ', this.turn_around_time_highly, '%')
       const total_turn = turn_around_time_high + turn_around_time_highly
       // this.turn_around_time_top2 = this.turn_around_time_high + this.turn_around_time_highly
-      this.turn_around_time_top2 = total ? Math.floor((total_turn / total) * 100):0
+      this.turn_around_time_top2 = total ? Math.round((total_turn / total) * 100) : 0
 
       ///console.log('Top 2 Boxes = ', this.turn_around_time_top2, '%')
 
@@ -403,8 +562,9 @@ export const useDataStore = defineStore({
       ).length
       console.log('Overall high Count= ', over_all_high)
 
-      //console.log('Overall high Count= ', over_all_high)
-      this.overAll_high = total ? Math.round((over_all_high / total) * 100) : 0
+      console.log('Overall high Count= ', over_all_high)
+      // this.overAll_high = total ? Math.round((over_all_high / total) * 100) : 0
+      // this.overAll_high = total ? Math.round((over_all_high / total) * 100) : 0
 
       //console.log('Overall high Percentage= ', this.overAll_high, '%')
 
@@ -419,8 +579,9 @@ export const useDataStore = defineStore({
       this.overAll_highly = total ? Math.round((over_all_highly / total) * 100) : 0
 
       //console.log('Overall highly Percentage = ', this.overAll_highly, '%')
-
-      this.overAll_top2 = this.overAll_high + this.overAll_highly
+      const total_overAll_count = over_all_high + over_all_highly
+      // this.overAll_top2 = this.overAll_high + this.overAll_highly
+      this.overAll_top2 = total ? Math.round((total_overAll_count / total) * 100) : 0
 
       console.log('guage = ', this.overAll_top2)
 
@@ -513,6 +674,49 @@ export const useDataStore = defineStore({
       this.filters.branch = branch
       this.applyFilters()
     },
+    updateTop5Array() {
+      const stats = {
+        'Withdrawing money': this.withdrawal,
+        'Opening a new account': this.opening_new_acc,
+        'Depositing money': this.deposit,
+        'Updating personal information': this.Update_personal_info,
+        'Closing an account': this.closing_acc,
+        'Transferring funds': this.transferring_fund,
+        'Loan services/information': this.loan_service,
+        'Complain resolution': this.Complain_resolution,
+        'Foreign exchange services': this.Foreign_echange,
+        'Credit and debit card services': this.credit_card,
+        'Investment services': this.Investment_service,
+        'Financial advice and planning': this.financial_advice,
+        'Customer support and inquiries': this.customer_support,
+        'Digital banking services': this.digital_banking,
+        'Money/Pay orders': this.money_pay_order,
+        'Safe deposit lockers': this.safe_deposit,
+        'Payments of bills/dues': this.payment_dues,
+        'Cheque deposit': this.cheque_deposit,
+        'Issuance of Cheque book': this.issuance_cheque_book,
+        'Bank statement': this.bank_statement,
+        'Online transaction': this.online_transaction,
+        'Installment of plot': this.installment_plot,
+        'To receive ATM card': this.receive_ATM,
+        'Credit card payment': this.credit_card_payment
+      }
+
+      console.log(stats)
+
+      // Filter out the categories with a value of zero
+      const filteredStats = Object.entries(stats).filter(([key, value]) => value > 0)
+
+      // Sort the remaining entries and select the top 5
+      const sortedStats = filteredStats.sort((a, b) => b[1] - a[1])
+      const top5Stats = sortedStats.slice(0, 5)
+
+      // Update the top5Array
+      this.top5Array = top5Stats.map(([key, value]) => ({ x: key, y: value }))
+
+      console.log('top5Array', this.top5Array)
+    },
+
     clearFilters() {
       this.filters.gender = ''
       this.filters.customerType = ''
@@ -528,6 +732,7 @@ export const useDataStore = defineStore({
       this.filteredData = [...this.originalData]
       this.updateStatistics()
       this.getOverallTop2ArrayByDate()
+      this.updateTop5Array()
     }
   }
 })
