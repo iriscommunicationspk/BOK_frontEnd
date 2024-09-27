@@ -1,28 +1,31 @@
 <script setup lang="ts">
+
+
 const props = defineProps(['subtitle', 'title', 'customClasses'])
+
 </script>
 
 <template>
   <!-- ====== Forms Section Start -->
   <div
-    class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark"
+    class="rounded-sm border border-stroke shadow-default dark:border-strokedark dark:bg-boxdark bg-white"
   >
-    <div class="flex flex-wrap items-center">
+    <div class="flex flex-wrap items-center  ">
       <div class="hidden w-full xl:block xl:w-1/2">
         <div class="py-17.5 px-26 text-center">
-          <router-link class="mb-5.5 inline-block" to="/">
+          <!-- <router-link class="mb-5.5 inline-block" to="/">
             <img
               class="hidden dark:block h-[80px]"
               src="@/assets/images/logo/logo-white.png"
               alt="Logo"
             />
             <img class="dark:hidden" src="@/assets/images/logo/logo-dark.svg" alt="Logo" />
-          </router-link>
+          </router-link> -->
 
-          <p class="font-medium 2xl:px-20">Sign in to Iris Admin Dashboard</p>
+          <!-- <p class="font-medium 2xl:px-20">Sign in to Iris Admin Dashboard</p> -->
 
           <span class="mt-15 inline-block">
-            <img src="@/assets/images/illustration/illustration-03.svg" alt="illustration" />
+            <img src="@/assets/images/logo/al-logo.png" alt="illustration" class="drop-shadow-2xl"/>
           </span>
         </div>
       </div>

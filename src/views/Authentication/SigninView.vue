@@ -1,13 +1,84 @@
 <script setup lang="ts">
 import DefaultAuthCard from '@/components/Auths/DefaultAuthCard.vue'
 import InputGroup from '@/components/Auths/InputGroup.vue'
+import { useToast } from "vue-toastification";
+// import BreadcrumbDefault from '@/components/Breadcrumbs/BreadcrumbDefault.vue'
+// import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import { onMounted, ref } from 'vue'
+import axios from 'axios';
+import router from '@/router';
+import { useAuthStore } from '@/stores/auth';
+
+const toast = useToast();
+const form = ref({
+  email: '',
+  password: '',
+})
+const formReset = () => {
+  form.value = {
+    email: '',
+    password: '',
+  }
+}
+
+const handlesubmit = async () => {
+  console.log(form.value);
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_APP_ENDPOINT}login`, form.value);
+    
+    // Assuming the API returns user data and possibly a token
+    const userData = response.data.user; // Adjust based on your actual API response
+    const token = response.data.token; // If you are using a token
+
+    // Save user data or token to local storage
+    localStorage.setItem('user', JSON.stringify(userData)); // Save user object
+    localStorage.setItem('token', token); // Save token if applicable
+
+    toast.success("Login Successfully", {
+      timeout: 1500,
+      closeOnClick: true,
+      pauseOnFocusLoss: true,
+      pauseOnHover: true,
+      draggable: true,
+      draggablePercent: 0.6,
+      showCloseButtonOnHover: false,
+      hideProgressBar: false,
+      closeButton: "button",
+      icon: true,
+      rtl: false
+    });
+
+    formReset();
+    router.push('/'); // Redirect to the dashboard
+    useAuthStore().userName = response.data.user.name;
+    console.log((response.data.user.name).slice(1));
+  } catch (error) {
+    toast.error("Error in signing in", {
+      timeout: 3000,
+      closeOnClick: true,
+      pauseOnFocusLoss: true,
+      pauseOnHover: true,
+      draggable: true,
+      draggablePercent: 0.6,
+      showCloseButtonOnHover: false,
+      hideProgressBar: false,
+      closeButton: "button",
+      icon: true,
+      rtl: false
+    });
+    console.log(error);
+  }
+}
+
 </script>
+
+
 
 <template>
   <div class="flex items-center justify-center min-h-screen p-6 bg-gray-50 dark:bg-gray-900">
-    <DefaultAuthCard subtitle="Start for free" title="Sign In to iris communication">
+    <DefaultAuthCard  title="Sign In to Bank Alfalah">
       <form>
-        <InputGroup label="Email" type="email" placeholder="Enter your email">
+        <InputGroup label="Email" type="email" placeholder="Enter your email" v-model="form.email">
           <svg
             class="fill-current"
             width="22"
@@ -25,7 +96,7 @@ import InputGroup from '@/components/Auths/InputGroup.vue'
           </svg>
         </InputGroup>
 
-        <InputGroup label="Password" type="password" placeholder="6+ Characters, 1 Capital letter">
+        <InputGroup label="Password" type="password" placeholder="6+ Characters, 1 Capital letter" v-model="form.password">
           <svg
             class="fill-current"
             width="22"
@@ -50,8 +121,9 @@ import InputGroup from '@/components/Auths/InputGroup.vue'
         <div class="mb-5 mt-6">
           <input
             type="submit"
+            @click.prevent="handlesubmit"
             value="Sign In"
-            class="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 font-medium text-white transition hover:bg-opacity-90"
+            class="w-full cursor-pointer rounded-lg border border-[#465985] bg-[#465985] p-4 font-medium text-white transition hover:bg-opacity-10 hover:text-[#465985]"
           />
         </div>
 
@@ -79,6 +151,7 @@ import InputGroup from '@/components/Auths/InputGroup.vue'
                   d="M4.39899 11.9777C4.1758 11.3411 4.06063 10.673 4.05807 9.99996C4.06218 9.32799 4.1731 8.66075 4.38684 8.02225L4.38115 7.88968L1.19269 5.4624L1.0884 5.51101C0.372763 6.90343 0 8.4408 0 9.99987C0 11.5589 0.372763 13.0963 1.0884 14.4887L4.39899 11.9777Z"
                   fill="#FBBC05"
                 />
+
                 <path
                   d="M10.2059 3.86663C11.668 3.84438 13.0822 4.37803 14.1515 5.35558L17.0313 2.59996C15.1843 0.901848 12.7383 -0.0298855 10.2059 -3.6784e-05C8.31431 -0.000477834 6.4599 0.514732 4.85001 1.48798C3.24011 2.46124 1.9382 3.85416 1.08984 5.51101L4.38946 8.02225C4.79303 6.82005 5.57145 5.77231 6.61498 5.02675C7.65851 4.28118 8.9145 3.87541 10.2059 3.86663Z"
                   fill="#EB4335"
@@ -94,12 +167,12 @@ import InputGroup from '@/components/Auths/InputGroup.vue'
           Sign in with Google
         </button> -->
 
-        <!-- <div class="mt-6 text-center">
+        <div class="mt-6 text-center">
           <p class="font-medium">
             Don’t have any account?
             <router-link to="/auth/signup" class="text-primary">Sign up</router-link>
           </p>
-        </div> -->
+        </div>
       </form>
     </DefaultAuthCard>
   </div>

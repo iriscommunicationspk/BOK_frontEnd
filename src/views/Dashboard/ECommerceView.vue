@@ -13,6 +13,7 @@ import CustomDropdown from '@/components/DropDown/DropDown.vue'
 import { ref } from 'vue'
 import VBarChart from '@/components/Charts/ApexCharts/VBarChart.vue'
 
+
 const dataStore = useDataStore()
 dataStore.fetchData() // Fetch and initialize data
 
