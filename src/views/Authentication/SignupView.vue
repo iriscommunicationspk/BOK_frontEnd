@@ -8,6 +8,8 @@ import { useToast } from "vue-toastification";
 import { onMounted, ref } from 'vue'
 import router from '@/router';
 
+
+
 const toast = useToast();
 const form = ref({
   name: '',
@@ -133,7 +135,7 @@ const handlesubmit = async () => {
           </svg>
         </InputGroup>
 
-        <InputGroup label="Re-type Password" type="password" placeholder="Re-enter your password">
+        <!-- <InputGroup label="Re-type Password" type="password" placeholder="Re-enter your password">
           <svg class="fill-current" width="22" height="22" viewBox="0 0 22 22" fill="none"
             xmlns="http://www.w3.org/2000/svg">
             <g opacity="0.5">
@@ -145,11 +147,14 @@ const handlesubmit = async () => {
                 fill="" />
             </g>
           </svg>
-        </InputGroup>
+        </InputGroup> -->
 
         <div class="mb-5 mt-6">
           <input @click.prevent="handlesubmit" value="Create account" type="button"
             class="w-full cursor-pointer rounded-lg border border-[#465985] bg-[#465985] p-4 font-medium text-white transition hover:bg-opacity-90 text-center" />
+            <loader>
+
+            </loader>
         </div>
 
        
