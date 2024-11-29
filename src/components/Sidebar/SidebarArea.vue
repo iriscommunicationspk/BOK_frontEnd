@@ -295,7 +295,7 @@ const menuGroups = ref([
 
 <template>
   <aside
-    class="absolute left-0 top-0 z-9999 flex h-screen  flex-col overflow-y-hidden bg-slate-200 duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 shadow-3"
+    class="absolute left-0 top-0 z-9999 flex h-screen flex-col overflow-y-hidden bg-[#F4F5F7] duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 bg-gradient-to-t from-[#fce4d3] to-[#F1F5F9]"
     :class="{
       'translate-x-0': sidebarStore.isSidebarOpen,
       '-translate-x-full': !sidebarStore.isSidebarOpen
@@ -304,14 +304,21 @@ const menuGroups = ref([
   >
     <!-- SIDEBAR HEADER -->
     <div class="flex items-center justify-between lg:justify-center gap-2 px-6 py-5.5 lg:py-6.5">
-      <router-link to="/">
-        <img
-          src="@/assets/images/logo/logo.png"
-          class="h-[120px] w-[120px]"
-          alt="Logo"
-          style="filter: drop-shadow(2px 8px 50px white)"
-        />
-      </router-link>
+      <div class="flex flex-col justify-center items-center">
+        <router-link to="/">
+          <img
+            src="@/assets/images/logo/logo.png"
+            class="h-[130px] w-[150px]"
+            alt="Logo"
+            style="filter: drop-shadow(2px 8px 50px white)"
+          />
+        </router-link>
+        <div class="w-full border-b mb-4"></div>
+        <h1 class="text-3xl font-extrabold text-[#164176] tracking-tighter">
+          B<span class="text-[#EF5930]">O</span>K
+        </h1>
+        <p>Bank of Khayber</p>
+      </div>
 
       <button class="block lg:hidden" @click="sidebarStore.isSidebarOpen = false">
         <svg

@@ -4,27 +4,27 @@ import { useSidebarStore } from '@/stores/sidebar'
 // import DropdownMessage from './DropdownMessage.vue'
 // import DropdownNotification from './DropdownNotification.vue'
 import DropdownUser from './DropdownUser.vue'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
+const router = useRouter()
 
 const logout = () => {
   // Clear user information from local storage
-  localStorage.removeItem('user'); // or any other user token you might be using
+  localStorage.removeItem('user') // or any other user token you might be using
 
   // Redirect to the sign-in page
-  router.push({ name: 'signin' });
-};
+  router.push({ name: 'signin' })
+}
 
 const { toggleSidebar } = useSidebarStore()
 const sidebarStore = useSidebarStore()
 </script>
 
 <template>
-  <header
-    class="sticky top-0 z-999 flex w-full bg-slate-200 drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none"
-  >
-    <div class="flex flex-grow items-center justify-between lg:justify-center py-4 px-4 shadow-2 md:px-6 2xl:px-11">
+  <header class="sticky top-0 z-999 flex w-full bg-[#F4F5F7]">
+    <div
+      class="flex flex-grow items-center justify-between lg:justify-center py-4 px-4 md:px-6 2xl:px-11 bg-[#F4F5F7]"
+    >
       <div class="flex items-center gap-2 sm:gap-4 lg:hidden">
         <!-- Hamburger Toggle BTN -->
         <button
@@ -104,7 +104,7 @@ const sidebarStore = useSidebarStore()
         </form>
       </div>
 
-      <div class="flex items-center gap-3 2xsm:gap-7 ">
+      <div class="flex items-center gap-3 2xsm:gap-7">
         <ul class="flex items-center gap-2 2xsm:gap-4">
           <li>
             <!-- Dark Mode Toggler -->

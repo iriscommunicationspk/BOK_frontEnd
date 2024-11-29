@@ -1,25 +1,26 @@
 <script setup lang="ts">
-import { ref, watchEffect, computed } from 'vue'
+import { ref, watchEffect, computed, watch } from 'vue'
 // @ts-ignore
 import VueApexCharts from 'vue3-apexcharts'
 import { useDataStore } from '@/stores/data'
-import { PulseLoader } from 'vue-spinner/dist/vue-spinner.min.js'
+import LoaderVue from '@/components/Loader/LoaderVue.vue'
 
 const chart = ref(null)
 const dataStore = useDataStore()
 
 const getColor = (value: number): string => {
-  if (value >= 0 && value <= 25) return '#FF4560'
-  if (value > 25 && value <= 50) return '#FDDD60'
-  if (value > 50 && value <= 75) return '#58D9F9'
-  return '#7CFFB2' // Red for low values
+  if (value >= 0 && value <= 69) return '#fb5454'
+  if (value > 69 && value <= 79) return '#F97317'
+  if (value >= 80 && value <= 84) return '#3b82f6'
+  if (value >= 85 && value <= 90) return '#06b6d4'
+  return '#22c55e' // Red for low values
 }
 
 const data1 = ref({
-  series: [dataStore.turn_around_time_top2],
+  series: [Math.floor(dataStore.branch_exterior_overAllScore)],
   chartOptions: computed(() => ({
     chart: {
-      height: 350,
+      height: 300,
       type: 'radialBar',
       toolbar: {
         show: true, // Enable the toolbar
@@ -49,55 +50,52 @@ const data1 = ref({
       }
     },
     fill: {
-      colors: [getColor(dataStore.overAll_top2)]
+      colors: [getColor(dataStore.branch_exterior_overAllScore)]
     },
-    labels: ['']
+    labels: [' ']
   }))
 })
 
 watchEffect(() => {
-  data1.value.series = [dataStore.turn_around_time_top2]
-  data1.value.chartOptions.fill.colors = [getColor(dataStore.overAll_top2)]
+  data1.value.series = [Math.floor(dataStore.branch_exterior_overAllScore)]
+  data1.value.chartOptions.fill.colors = [getColor(dataStore.branch_exterior_overAllScore)]
 })
 </script>
 
 <template>
-  <div class="relative">
-    <div class="justify-center gap-4 sm:flex">
-      <div class="">
-        <h2 class="text-[20px] font-bold text-black dark:text-white text-center">
-          Satisfaction Score
-        </h2>
-        <h4 class="text-[18px] font-semibold text-black dark:text-white text-center">
-          Turnaround time of purpose of visit
-        </h4>
-      </div>
+  <div
+    class="relative col-span-12 min-h-[400px] backdrop-blur-lg bg-white bg-opacity-90 px-5 pt-7.5 pb-5 rounded-lg sm:px-7.5 xl:col-span-4"
+  >
+    <div>
+      <h4
+        class="text-[19px] text-center font-extrabold text-black tracking-tight dark:text-white my-5"
+      >
+        Branch Exterior Overall Score
+      </h4>
     </div>
-
-    <div class="mb-2 mt-[20px]" v-if="useDataStore().turn_around_time_top2 > 0">
-      <div id="TreeMap" class="flex justify-center">
-        <VueApexCharts
-          type="radialBar"
-          height="350"
-          width="350"
-          :options="data1.chartOptions"
-          :series="data1.series"
-          ref="chart"
-        />
+    <div class="relative">
+      <div class="" v-if="useDataStore().overAllScore > 0">
+        <div id="TreeMap" class="flex justify-center">
+          <VueApexCharts
+            type="radialBar"
+            height="300"
+            width="300"
+            :options="data1.chartOptions"
+            :series="data1.series"
+            ref="chart"
+          />
+        </div>
+        <span class="mr-8 font-bold float-right text-[14px] text-black/40">
+          n={{ useDataStore().achieved }}
+        </span>
       </div>
-      <span class="mr-8 font-bold float-right text-[14px] text-black/40">
-        n={{ useDataStore().achieved }}
-      </span>
-    </div>
 
-    <div
-      v-else
-      class="absolute left-[15%] top-[150%] text-center font-extrabold text-black dark:text-white mb-8"
-    >
-      <div v-if="!useDataStore().loader" class="ml-20 mt-5">
-        <pulse-loader :color="useDataStore().color" :size="useDataStore().size"></pulse-loader>
+      <div v-else class="">
+        <div v-if="useDataStore().loader" class="flex justify-center absolute top-[6rem] left-1/2">
+          <LoaderVue />
+        </div>
+        <div v-else class="mt-5 ml-20 text-xl">No Data</div>
       </div>
-      <div v-else class="mt-5 ml-26 text-xl">No Data</div>
     </div>
   </div>
 </template>

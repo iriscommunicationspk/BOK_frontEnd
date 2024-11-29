@@ -17,7 +17,7 @@ import SidebarArea from '@/components/Sidebar/SidebarArea.vue'
       <!-- ===== Header End ===== -->
 
       <!-- ===== Main Content Start ===== -->
-      <main>
+      <main class="bg-gradient-to-t from-[#fce4d3] to-[#F1F5F9]">
         <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
           <slot></slot>
         </div>

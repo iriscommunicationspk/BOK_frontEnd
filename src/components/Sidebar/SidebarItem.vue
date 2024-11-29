@@ -26,7 +26,7 @@ const handleItemClick = () => {
   <li>
     <router-link
       :to="item.route"
-      class="group relative flex items-center gap-2.5 bg-[#455984] mr-5 rounded-r-3xl py-2 pr-4 pl-6 font-medium text-white hover:text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4"
+      class="group relative flex items-center gap-2.5 bg-[#f29f67] mr-10 rounded-r-xl py-2 pr-4 pl-10 font-semibold text-[#1e1e2c] hover:text-[#f29f67] duration-300 ease-in-out hover:bg-[#1e1e2c] dark:hover:bg-meta-4"
       @click.prevent="handleItemClick"
     >
       <span v-html="item.icon"></span>

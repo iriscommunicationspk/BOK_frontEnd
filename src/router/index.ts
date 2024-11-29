@@ -146,6 +146,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import SigninView from '@/views/Authentication/SigninView.vue'
 import SignupView from '@/views/Authentication/SignupView.vue'
 import ECommerceView from '@/views/Dashboard/ECommerceView.vue'
+import { useAuthStore } from '@/stores/auth'
 // import other views as needed...
 
 const routes = [
@@ -188,6 +189,11 @@ const router = createRouter({
 // Navigation guard for authentication
 router.beforeEach((to, from, next) => {
   const loggedIn = !!localStorage.getItem('user'); // Check if user is logged in
+  const user = localStorage.getItem('user');
+  const userName = user ? JSON.parse(user)?.name : null;
+  useAuthStore().userName = userName
+  console.log(userName);
+  
 
   // If the user is logged in and trying to access the sign-in or sign-up pages, redirect them to the home page
   if (loggedIn && (to.name === 'signin' || to.name === 'signup')) {
