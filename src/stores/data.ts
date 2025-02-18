@@ -15,13 +15,14 @@ interface DataItem {
   city_codes: string
   branch_type_code: string
   code_scenarios: string
+  branch_code: string
 }
 
 export const useDataStore = defineStore({
   id: 'data',
   state: () => ({
     loader: true,
-    total_sample: 235,
+    total_sample: 232,
     achieved: 0,
     islamic_count: 0,
     conventional_count: 0,
@@ -35,6 +36,7 @@ export const useDataStore = defineStore({
     filter: {
       province: '',
       city: '',
+      branch: '',
       branch_type: '',
       scenario: ''
     },
@@ -62,7 +64,8 @@ export const useDataStore = defineStore({
         this.originalData = [...response.data.data]
         this.achieved = response.data.count
         this.filteredData = this.data // Initialize filteredData with all data
-
+       
+        
         this.calculateOverAllScore()
         this.applyFilters() // Apply filters after fetching data
         // this.calculateOverAllScore();
@@ -143,6 +146,13 @@ export const useDataStore = defineStore({
           return Number(item.city_codes) === cityCode
         })
         // filtered = filtered.filter((item) => item.city_codes === this.filter.city);
+      }
+
+      if(this.filter.branch) {
+        const branchCode = useBigData().branches.find((branch) => branch.name == this.filter.branch)?.code
+        console.log(branchCode);
+        
+        filtered = filtered.filter((item) => Number(item.branch_code) === branchCode)
       }
 
       if (this.filter.branch_type) {    
@@ -270,6 +280,11 @@ export const useDataStore = defineStore({
       this.filter.city = city
       this.applyFilters()
     },
+    setBranch(branch: string) {
+      console.log(branch)
+      this.filter.branch = branch
+      this.applyFilters()
+    },
     setBranchType(branchType: string) {
       this.filter.branch_type = branchType
       this.applyFilters()
@@ -282,6 +297,7 @@ export const useDataStore = defineStore({
       this.filter = {
         province: '',
         city: '',
+        branch: '',
         branch_type: '',
         scenario: ''
       }

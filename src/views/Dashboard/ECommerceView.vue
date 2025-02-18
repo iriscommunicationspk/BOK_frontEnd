@@ -20,6 +20,7 @@ dataStore.fetchData() // Fetch and initialize data
 
 const province = ref('Choose a province')
 const city = ref('Choose a city')
+const branch = ref('Choose a branch')
 const branchType = ref('Choose a branch type')
 const scenario = ref('Choose a scenario')
 
@@ -39,6 +40,12 @@ function setFilter(filter: string, value: string) {
   }
 }
 
+//filter by branch
+function filterByBranch(selectedBranch: string) {
+  const branchValue = selectedBranch === 'Choose a branch' ? '' : selectedBranch
+  dataStore.setBranch(branchValue)
+}
+
 // Filters for branch type
 function filterByCityBranchType(selectedBranchType: string) {
   const branchTypeValue = selectedBranchType === 'Choose a branch type' ? '' : selectedBranchType
@@ -55,6 +62,7 @@ function filterByScenario(selectedScenario: string) {
 function filterRemoved() {
   province.value = 'Choose a province'
   city.value = 'Choose a city'
+  branch.value = 'Choose a branch'
   branchType.value = 'Choose a branch type'
   scenario.value = 'Choose a scenario'
 
@@ -65,7 +73,7 @@ function filterRemoved() {
 <template>
   <DefaultLayout>
     <div>
-      <div class="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 justify-between gap-1 flex-wrap">
+      <div class="grid lg:grid-cols-5 md:grid-cols-2 grid-cols-1 justify-between gap-1 flex-wrap">
         <div>
           <label
             for="province-filter"
@@ -93,7 +101,7 @@ function filterRemoved() {
         <div>
           <div>
             <label
-              for="branch-filter"
+              for="city-filter"
               class="block text-base font-bold text-[#1e1e2c] dark:text-white ml-2"
             >
               City
@@ -103,6 +111,22 @@ function filterRemoved() {
               placeholder="Choose a city"
               v-model="city"
               @update:modelValue="(value) => setFilter('city', value)"
+            />
+          </div>
+        </div>
+        <div>
+          <div>
+            <label
+              for="branch-filter"
+              class="block text-base font-bold text-[#1e1e2c] dark:text-white ml-2"
+            >
+              Branch
+            </label>
+            <CustomDropdown
+              :options="useBigData().branches.map((branch) => branch.name)"
+              placeholder="Choose a branch"
+              v-model="branch"
+              @update:modelValue="filterByBranch"
             />
           </div>
         </div>
@@ -143,6 +167,7 @@ function filterRemoved() {
             v-if="
               dataStore.filter.province ||
               dataStore.filter.city ||
+              dataStore.filter.branch ||
               dataStore.filter.branch_type ||
               dataStore.filter.scenario
             "

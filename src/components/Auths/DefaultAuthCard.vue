@@ -4,7 +4,7 @@ const props = defineProps(['subtitle', 'title', 'customClasses'])
 
 <template>
   <!-- ====== Forms Section Start -->
-  <div class="rounded-lg shadow-default bg-opacity-30 bg-[#FFFFFF] w-1/2">
+  <div class="rounded-lg shadow-default w-1/2">
     <div class="flex flex-wrap items-center">
       <div class="hidden w-full xl:block xl:w-[50%] px-26">
         <div class="text-center">
